@@ -7,11 +7,11 @@ import androidx.room.PrimaryKey
 @Entity
 data class LoginEntity(
 	@PrimaryKey(autoGenerate = true)
-	val uid: Int,
+	val uid: Int? = 0,
 	@ColumnInfo(name = "LOGIN")
 	val login: String,
 	@ColumnInfo(name = "PASSWORD")
-	val password: String,
+	var password: String,
 	@ColumnInfo(name = "E-MAIL")
-	val email: String
+	var email: String
 )

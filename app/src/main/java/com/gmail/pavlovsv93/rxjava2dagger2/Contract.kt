@@ -11,7 +11,7 @@ class Contract {
 	}
 
 	interface LoginPresenterInterface {
-		fun onAttachView(view: LoginViewInterface)
+		fun onAttachView(attachView: LoginViewInterface)
 		fun onAuthorization(login: String, password: String): Boolean
 		fun onRegistration()
 		fun onForgotPassword()

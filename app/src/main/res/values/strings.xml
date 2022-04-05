@@ -6,4 +6,6 @@
 	<string name="registration">Регистрация</string>
 	<string name="forgot_password">Забыл пароль</string>
 	<string name="error">Неверный логин или пароль!</string>
+	<string name="error_login">Такой логин уже существует</string>
+	<string name="email_error">На этот E-mail зарегистрирован аккаунт</string>
 </resources>
