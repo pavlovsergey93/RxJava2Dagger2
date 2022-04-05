@@ -1,4 +1,4 @@
-package com.gmail.pavlovsv93.rxjava2dagger2
+package com.gmail.pavlovsv93.rxjava2dagger2.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import com.gmail.pavlovsv93.rxjava2dagger2.Contract
+import com.gmail.pavlovsv93.rxjava2dagger2.R
 import com.gmail.pavlovsv93.rxjava2dagger2.databinding.FragmentLoginBinding
 import com.google.android.material.snackbar.Snackbar
 
-class LoginFragment : Fragment(), Contract.LoginViewInterface{
+class LoginFragment : Fragment(), Contract.LoginViewInterface {
 
 	private var _binding : FragmentLoginBinding? = null
 	private val binding get() = _binding!!

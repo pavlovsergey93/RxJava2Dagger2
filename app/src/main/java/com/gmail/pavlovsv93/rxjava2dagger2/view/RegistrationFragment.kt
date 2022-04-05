@@ -1,4 +1,4 @@
-package com.gmail.pavlovsv93.rxjava2dagger2
+package com.gmail.pavlovsv93.rxjava2dagger2.view
 
 import androidx.fragment.app.Fragment
 

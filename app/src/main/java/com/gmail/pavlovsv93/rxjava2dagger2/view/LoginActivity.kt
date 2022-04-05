@@ -1,7 +1,8 @@
-package com.gmail.pavlovsv93.rxjava2dagger2
+package com.gmail.pavlovsv93.rxjava2dagger2.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.gmail.pavlovsv93.rxjava2dagger2.R
 
 class LoginActivity : AppCompatActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
