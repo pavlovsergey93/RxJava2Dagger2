@@ -1,4 +1,4 @@
-package com.gmail.pavlovsv93.rxjava2_dagger2
+package com.gmail.pavlovsv93.rxjava2dagger2
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

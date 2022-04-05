@@ -16,16 +16,20 @@
 				android:id="@+id/login"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
+				android:layout_marginBottom="@dimen/dp8"
 				android:hint="@string/hint_login"
 				android:paddingHorizontal="@dimen/dp8"
+				android:singleLine="true"
 				android:textSize="@dimen/sp25" />
 
 		<EditText
 				android:id="@+id/password"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
+				android:layout_marginBottom="@dimen/dp4"
 				android:hint="@string/hint_password"
 				android:paddingHorizontal="@dimen/dp8"
+				android:singleLine="true"
 				android:textSize="@dimen/sp25" />
 
 		<com.google.android.material.button.MaterialButton
@@ -43,6 +47,7 @@
 				android:text="@string/registration" />
 
 		<com.google.android.material.button.MaterialButton
+				android:id="@+id/forgot_password"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_margin="@dimen/dp4"
