@@ -13,7 +13,6 @@ class RegistrationContract {
 	}
 
 	interface RegistrationPresenterInterface{
-		fun onAttachView(attachView: RegistrationContract.RegistrationViewInterface)
 		fun onCheckedAccount(login: String, email: String)
 		fun onInsertAccount(login: String, password: String, email: String)
 		fun onUpdateAccount(account: LoginEntity, password: String?, email: String?)

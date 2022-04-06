@@ -36,9 +36,9 @@ class LoginPresenter : LoginContract.LoginPresenterInterface {
 		})
 	}
 
-	override fun onDeleteAccount(account: LoginEntity) {
+	override fun onDeleteAccount(login: String) {
 		view?.showProgress()
-		repo.deleteAccount(account, object : Callback<LoginEntity> {
+		repo.deleteAccount(login, object : Callback<LoginEntity> {
 			override fun onSuccess(result: LoginEntity?) {
 				view?.showLayoutSing()
 				view?.setMessageState(R.string.delete_account_state.toString())

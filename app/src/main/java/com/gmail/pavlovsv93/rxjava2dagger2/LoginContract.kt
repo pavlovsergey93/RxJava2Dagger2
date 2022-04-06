@@ -17,6 +17,6 @@ class LoginContract {
 	interface LoginPresenterInterface {
 		fun onAttachView(attachView: LoginViewInterface)
 		fun onAuthorization(login: String, password: String)
-		fun onDeleteAccount(account: LoginEntity)
+		fun onDeleteAccount(login: String)
 	}
 }

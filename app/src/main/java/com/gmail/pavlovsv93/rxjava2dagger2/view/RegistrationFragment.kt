@@ -20,20 +20,20 @@ class RegistrationFragment : Fragment(), RegistrationContract.RegistrationViewIn
 	private var _binding: FragmentRegistrationBinding? = null
 	private val binding get() = _binding!!
 	private val presenter: RegistrationContract.RegistrationPresenterInterface =
-		RegistrationPresenter()
+		RegistrationPresenter(this)
 	private var flag : Boolean = true
 
-	private var accountUpdate: LoginEntity? = null
+	private var accountUpdate: String? = null
 
 	companion object {
 		fun newInstance() = RegistrationFragment()
 
 		const val KEY_ACCOUNT_UPDATE = "KEY_ACCOUNT_UPDATE"
 
-		fun updateInstance(account: LoginEntity): RegistrationFragment {
+		fun updateInstance(login: String): RegistrationFragment {
 			return RegistrationFragment().apply {
 				arguments = Bundle().apply {
-					putParcelable(KEY_ACCOUNT_UPDATE, account)
+					putString(KEY_ACCOUNT_UPDATE, login)
 				}
 			}
 		}
@@ -45,14 +45,13 @@ class RegistrationFragment : Fragment(), RegistrationContract.RegistrationViewIn
 		savedInstanceState: Bundle?
 	): View? {
 		_binding = FragmentRegistrationBinding.inflate(inflater, container, false)
-		presenter.onAttachView(this)
 		return binding.root
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		if (arguments != null) {
-			accountUpdate = arguments?.getParcelable(KEY_ACCOUNT_UPDATE)
+			accountUpdate = arguments?.getString(KEY_ACCOUNT_UPDATE)
 			if (accountUpdate != null) {
 				binding.login.setText(accountUpdate!!.login)
 				binding.login.isClickable = false
@@ -68,9 +67,9 @@ class RegistrationFragment : Fragment(), RegistrationContract.RegistrationViewIn
 		}
 
 		binding.btnRegistration.setOnClickListener {
-			val login: String = binding.login.toString()
-			val password: String = binding.password.toString()
-			val email: String = binding.email.toString()
+			val login: String = binding.login.text.toString()
+			val password: String = binding.password.text.toString()
+			val email: String = binding.email.text.toString()
 			if (binding.password.text.toString() == binding.password2.text.toString()) {
 				presenter.onCheckedAccount(login, email)
 				if (!flag) {

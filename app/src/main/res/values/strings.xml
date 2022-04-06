@@ -17,4 +17,5 @@
 	<string name="save">Сохранить</string>
 	<string name="error_registration">Введены некоректные данные!</string>
 	<string name="saved_registration">Аккаунт зарегистрирован успешно!</string>
+	<string name="exit">Выход</string>
 </resources>

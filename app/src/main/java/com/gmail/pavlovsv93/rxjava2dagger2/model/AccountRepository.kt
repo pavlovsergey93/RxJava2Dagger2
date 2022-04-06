@@ -4,6 +4,7 @@ import android.os.Handler
 import android.os.Looper
 import com.gmail.pavlovsv93.rxjava2dagger2.R
 import java.lang.Exception
+import java.util.*
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
@@ -11,7 +12,7 @@ interface AccountRepositoryInterface {
 	fun getAllLocalAccount(): List<LoginEntity>
 	fun getAuthorization(login: String, password: String, callback: Callback<LoginEntity>)
 	fun getAllAccount(callback: Callback<List<LoginEntity>>)
-	fun deleteAccount(account: LoginEntity, callback: Callback<LoginEntity>)
+	fun deleteAccount(login: String, callback: Callback<LoginEntity>)
 	fun updateAccount(
 		account: LoginEntity,
 		password: String? = null,
@@ -26,7 +27,7 @@ interface AccountRepositoryInterface {
 		callback: Callback<LoginEntity>
 	)
 
-	fun getCheckedLogin(login: String, email: String) : Boolean
+	fun getCheckedLogin(login: String, email: String): Boolean
 }
 
 class AccountRepository(private val localDataSource: LoginDAO) : AccountRepositoryInterface {
@@ -76,29 +77,28 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 		}
 	}
 
-	override fun deleteAccount(account: LoginEntity, callback: Callback<LoginEntity>) {
-
+	override fun deleteAccount(login: String, callback: Callback<LoginEntity>) {
 		executor.execute {
 			try {
+				var index: Int? = null
 				val localList: List<LoginEntity> = getAllLocalAccount()
 				for (i in localList.indices) {
-					if (localList[i].login == account.login && localList[i].email == account.email) {
-						localDataSource.deleteAccount(localList[i])
+					if (localList[i].login == login) {
+						index = i
 						break
 					}
 				}
 				handler.post {
-					callback.onSuccess(null)
+					index?.let {
+						localDataSource.deleteAccount(localList[it])
+						callback.onSuccess(null)
+					}
+					callback.onError("Ошибка удаления")
+
 				}
 
 			} catch (exc: Exception) {
 				callback.onError(exc.toString())
-			}
-		}
-		val localList: List<LoginEntity> = getAllLocalAccount()
-		for (i in localList.indices) {
-			if (localList[i].login == account.login && localList[i].email == account.email) {
-				localDataSource.deleteAccount(localList[i])
 			}
 		}
 	}
@@ -164,15 +164,17 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 							}
 						}
 						else -> {
-							val newAccount =
-								LoginEntity(login = login, password = password, email = email)
-							localDataSource.registration(newAccount)
-							handler.post {
-								callback.onSuccess(newAccount)
-							}
+							continue
 						}
 					}
 				}
+				val newAccount =
+					LoginEntity(uid = null, login = login, password = password, email = email)
+				handler.post {
+					localDataSource.registration(newAccount)
+					callback.onSuccess(newAccount)
+				}
+
 			} catch (exc: Exception) {
 				callback.onError(exc.toString())
 			}

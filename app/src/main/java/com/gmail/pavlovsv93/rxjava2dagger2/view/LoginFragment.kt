@@ -16,12 +16,22 @@ import com.google.android.material.snackbar.Snackbar
 
 class LoginFragment : Fragment(), LoginContract.LoginViewInterface {
 
-	private var _binding : FragmentLoginBinding? = null
+	private var _binding: FragmentLoginBinding? = null
 	private val binding get() = _binding!!
 	private val presenter: LoginContract.LoginPresenterInterface = LoginPresenter()
 
 	companion object {
 		fun newInstance() = LoginFragment()
+
+		const val KEY_ACCOUNT_SAVE = "KEY_ACCOUNT_SAVE"
+
+		fun saveInstance(login: String): RegistrationFragment {
+			return RegistrationFragment().apply {
+				arguments = Bundle().apply {
+					putString(KEY_ACCOUNT_SAVE, login)
+				}
+			}
+		}
 	}
 
 	override fun onCreateView(
@@ -54,14 +64,22 @@ class LoginFragment : Fragment(), LoginContract.LoginViewInterface {
 
 		//Обработка нажатия на "Удалить аккаунт"
 		binding.deleteAccount.setOnClickListener {
-//			presenter.onDeleteAccount() // Добавить аккаунт
+			val login = binding.login.text.toString()
+				presenter.onDeleteAccount(login)
+				showLayoutSing()
 		}
 
 		//Обработка нажатия на "Обновить аккаунт"
 		binding.updateAccount.setOnClickListener {
-//			requireActivity().supportFragmentManager.beginTransaction()
-//				.replace(R.id.fragment_container, RegistrationFragment.updateInstance())
-//				.commit()
+			val login = binding.login.text.toString()
+			requireActivity().supportFragmentManager.beginTransaction()
+				.replace(R.id.fragment_container, RegistrationFragment.updateInstance(login))
+				.addToBackStack(login)
+				.commit()
+		}
+		//Обработка нажатия "Выход"
+		binding.exit.setOnClickListener {
+			showLayoutSing()
 		}
 
 	}
@@ -101,10 +119,11 @@ class LoginFragment : Fragment(), LoginContract.LoginViewInterface {
 	override fun showLayoutSing() {
 		binding.llSingIn.visibility = View.VISIBLE
 		binding.llSingOut.visibility = View.GONE
+		binding.textView.text = ""
 	}
 
 	override fun showLayoutAccount(account: LoginEntity) {
-		binding.textView.text = (account.login + "\n" + account.email)
+		binding.textView.text = ("Логин: ${account.login} \nE-mail: ${account.email}")
 		binding.llSingOut.visibility = View.VISIBLE
 		binding.llSingIn.visibility = View.GONE
 	}

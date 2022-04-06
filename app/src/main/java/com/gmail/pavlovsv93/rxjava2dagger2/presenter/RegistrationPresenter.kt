@@ -5,23 +5,16 @@ import com.gmail.pavlovsv93.rxjava2dagger2.R
 import com.gmail.pavlovsv93.rxjava2dagger2.RegistrationContract
 import com.gmail.pavlovsv93.rxjava2dagger2.model.*
 
-class RegistrationPresenter : RegistrationContract.RegistrationPresenterInterface {
+class RegistrationPresenter(private var view: RegistrationContract.RegistrationViewInterface?) : RegistrationContract.RegistrationPresenterInterface {
 
-	private var view: RegistrationContract.RegistrationViewInterface? = null
 	private val repo: AccountRepositoryInterface = AccountRepository(AppDB.getLoginDao())
-
-	override fun onAttachView(attachView: RegistrationContract.RegistrationViewInterface) {
-		this.view = attachView
-	}
 
 	override fun onInsertAccount(login: String, password: String, email: String) {
 		view?.showProgress()
 		repo.insertAccount(login, password, email, object : Callback<LoginEntity> {
 			override fun onSuccess(result: LoginEntity?) {
-				result?.let {
-					view?.showSaved()
-					view?.hideProgress()
-				}
+				view?.hideProgress()
+				view?.showSaved()
 			}
 
 			override fun onError(error: String) {
@@ -35,9 +28,9 @@ class RegistrationPresenter : RegistrationContract.RegistrationPresenterInterfac
 		view?.showProgress()
 		repo.updateAccount(account, password, email, object : Callback<LoginEntity> {
 			override fun onSuccess(result: LoginEntity?) {
+				view?.hideProgress()
 				result?.let {
 					view?.showSaved()
-					view?.hideProgress()
 				}
 			}
 
