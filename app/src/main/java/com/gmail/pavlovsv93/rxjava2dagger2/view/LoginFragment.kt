@@ -6,15 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.gmail.pavlovsv93.rxjava2dagger2.Contract
+import com.gmail.pavlovsv93.rxjava2dagger2.LoginContract
 import com.gmail.pavlovsv93.rxjava2dagger2.R
 import com.gmail.pavlovsv93.rxjava2dagger2.databinding.FragmentLoginBinding
+import com.gmail.pavlovsv93.rxjava2dagger2.model.LoginEntity
+import com.gmail.pavlovsv93.rxjava2dagger2.presenter.LoginPresenter
+import com.gmail.pavlovsv93.rxjava2dagger2.utils.showSnackBarNoAction
 import com.google.android.material.snackbar.Snackbar
 
-class LoginFragment : Fragment(), Contract.LoginViewInterface {
+class LoginFragment : Fragment(), LoginContract.LoginViewInterface {
 
 	private var _binding : FragmentLoginBinding? = null
 	private val binding get() = _binding!!
+	private val presenter: LoginContract.LoginPresenterInterface = LoginPresenter()
 
 	companion object {
 		fun newInstance() = LoginFragment()
@@ -26,7 +30,40 @@ class LoginFragment : Fragment(), Contract.LoginViewInterface {
 		savedInstanceState: Bundle?
 	): View? {
 		_binding = FragmentLoginBinding.inflate(inflater, container, false)
+		presenter.onAttachView(this)
 		return binding.root
+	}
+
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
+
+		//Обработка нажатия на "Войти"
+		binding.singIn.setOnClickListener {
+			val login = binding.login.text.toString()
+			val password = binding.password.text.toString()
+			presenter.onAuthorization(login, password)
+		}
+
+		// Обработка нажатия на "Регистрация"
+		binding.registration.setOnClickListener {
+			requireActivity().supportFragmentManager.beginTransaction()
+				.replace(R.id.fragment_container, RegistrationFragment.newInstance())
+				.addToBackStack(binding.registration.text.toString())
+				.commit()
+		}
+
+		//Обработка нажатия на "Удалить аккаунт"
+		binding.deleteAccount.setOnClickListener {
+//			presenter.onDeleteAccount() // Добавить аккаунт
+		}
+
+		//Обработка нажатия на "Обновить аккаунт"
+		binding.updateAccount.setOnClickListener {
+//			requireActivity().supportFragmentManager.beginTransaction()
+//				.replace(R.id.fragment_container, RegistrationFragment.updateInstance())
+//				.commit()
+		}
+
 	}
 
 	override fun showProgress() {
@@ -51,11 +88,7 @@ class LoginFragment : Fragment(), Contract.LoginViewInterface {
 		binding.forgotPassword.isVisible = true
 		binding.registration.isVisible = true
 		binding.singIn.isVisible = true
-		Snackbar.make(binding.login, error, Snackbar.LENGTH_INDEFINITE).show()
-	}
-
-	override fun showRegistration(message: String) {
-		Snackbar.make(binding.login, message, Snackbar.LENGTH_SHORT).show()
+		binding.login.showSnackBarNoAction(error)
 	}
 
 	override fun setRegistration() {
@@ -63,6 +96,22 @@ class LoginFragment : Fragment(), Contract.LoginViewInterface {
 			.replace(R.id.fragment_container, RegistrationFragment.newInstance())
 			.addToBackStack(getString(R.string.registration))
 			.commit()
+	}
+
+	override fun showLayoutSing() {
+		binding.llSingIn.visibility = View.VISIBLE
+		binding.llSingOut.visibility = View.GONE
+	}
+
+	override fun showLayoutAccount(account: LoginEntity) {
+		binding.textView.text = (account.login + "\n" + account.email)
+		binding.llSingOut.visibility = View.VISIBLE
+		binding.llSingIn.visibility = View.GONE
+	}
+
+	override fun setMessageState(massage: String) {
+		hideProgress()
+		binding.llSingIn.showSnackBarNoAction(massage)
 	}
 
 }

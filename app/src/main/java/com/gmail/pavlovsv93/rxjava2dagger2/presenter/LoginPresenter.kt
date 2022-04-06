@@ -1,29 +1,56 @@
 package com.gmail.pavlovsv93.rxjava2dagger2.presenter
 
-import com.gmail.pavlovsv93.rxjava2dagger2.Contract
-import com.gmail.pavlovsv93.rxjava2dagger2.model.AccountRepository
-import com.gmail.pavlovsv93.rxjava2dagger2.model.AccountRepositoryInterface
-import com.gmail.pavlovsv93.rxjava2dagger2.model.AppDB
+import com.gmail.pavlovsv93.rxjava2dagger2.LoginContract
+import com.gmail.pavlovsv93.rxjava2dagger2.R
+import com.gmail.pavlovsv93.rxjava2dagger2.model.*
 
-class LoginPresenter : Contract.LoginPresenterInterface {
+class LoginPresenter : LoginContract.LoginPresenterInterface {
 
-	private var view: Contract.LoginViewInterface? = null
+	private var view: LoginContract.LoginViewInterface? = null
 	private val repo: AccountRepositoryInterface = AccountRepository(AppDB.getLoginDao())
+	private var flag = false
 
-
-	override fun onAttachView(AttachView: Contract.LoginViewInterface) {
-		this.view = AttachView
+	override fun onAttachView(attachView: LoginContract.LoginViewInterface) {
+		this.view = attachView
 	}
 
-	override fun onAuthorization(login: String, password: String): Boolean {
-		TODO("Not yet implemented")
+
+	override fun onAuthorization(login: String, password: String) {
+		view?.showProgress()
+		repo.getAuthorization(login, password, object : Callback<LoginEntity> {
+			override fun onSuccess(result: LoginEntity?) {
+				view?.hideProgress()
+				if (result != null) {
+					view?.showLayoutAccount(result)
+				} else {
+					view?.showLayoutSing()
+					view?.setError(R.string.error.toString())
+				}
+			}
+
+			override fun onError(error: String) {
+				view?.showLayoutSing()
+				view?.setError(error)
+			}
+
+		})
 	}
 
-	override fun onRegistration() {
-		TODO("Not yet implemented")
+	override fun onDeleteAccount(account: LoginEntity) {
+		view?.showProgress()
+		repo.deleteAccount(account, object : Callback<LoginEntity> {
+			override fun onSuccess(result: LoginEntity?) {
+				view?.showLayoutSing()
+				view?.setMessageState(R.string.delete_account_state.toString())
+			}
+
+			override fun onError(error: String) {
+				view?.showLayoutSing()
+				view?.setError(error)
+			}
+		})
 	}
 
-	override fun onForgotPassword() {
-		TODO("Not yet implemented")
-	}
+
 }
+

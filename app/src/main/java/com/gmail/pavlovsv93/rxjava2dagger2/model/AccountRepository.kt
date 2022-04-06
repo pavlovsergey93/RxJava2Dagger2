@@ -9,6 +9,7 @@ import java.util.concurrent.Executors
 
 interface AccountRepositoryInterface {
 	fun getAllLocalAccount(): List<LoginEntity>
+	fun getAuthorization(login: String, password: String, callback: Callback<LoginEntity>)
 	fun getAllAccount(callback: Callback<List<LoginEntity>>)
 	fun deleteAccount(account: LoginEntity, callback: Callback<LoginEntity>)
 	fun updateAccount(
@@ -24,6 +25,8 @@ interface AccountRepositoryInterface {
 		email: String,
 		callback: Callback<LoginEntity>
 	)
+
+	fun getCheckedLogin(login: String, email: String) : Boolean
 }
 
 class AccountRepository(private val localDataSource: LoginDAO) : AccountRepositoryInterface {
@@ -32,6 +35,32 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 	private val handler = Handler(Looper.getMainLooper())
 
 	override fun getAllLocalAccount(): List<LoginEntity> = localDataSource.getAllAccountData()
+
+	override fun getAuthorization(
+		login: String,
+		password: String,
+		callback: Callback<LoginEntity>
+	) {
+		executor.execute {
+			try {
+				var index: Int? = null
+				val localList: List<LoginEntity> = getAllLocalAccount()
+				for (i in localList.indices) {
+					if (localList[i].login == login && localList[i].password == password) {
+						index = i
+						break
+					}
+				}
+				handler.post {
+					index?.let {
+						callback.onSuccess(localList[index])
+					} ?: callback.onSuccess(null)
+				}
+			} catch (exc: Exception) {
+				callback.onError(exc.toString())
+			}
+		}
+	}
 
 	override fun getAllAccount(callback: Callback<List<LoginEntity>>) {
 		executor.execute {
@@ -58,7 +87,7 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 						break
 					}
 				}
-				handler.post{
+				handler.post {
 					callback.onSuccess(null)
 				}
 
@@ -148,6 +177,18 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 				callback.onError(exc.toString())
 			}
 		}
+	}
+
+	override fun getCheckedLogin(login: String, email: String): Boolean {
+		var index: Int? = null
+		val localList: List<LoginEntity> = getAllLocalAccount()
+		for (i in localList.indices) {
+			if (localList[i].login == login || localList[i].email == email) {
+				index = i
+				break
+			}
+		}
+		return index != null
 	}
 
 

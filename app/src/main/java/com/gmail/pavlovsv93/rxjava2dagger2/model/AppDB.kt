@@ -5,6 +5,11 @@ import androidx.room.Room
 
 class AppDB : Application() {
 
+	override fun onCreate() {
+		super.onCreate()
+		instance = this
+	}
+
 	companion object {
 		private var instance: AppDB? = null
 		private var db: LoginDB? = null
@@ -16,19 +21,16 @@ class AppDB : Application() {
 					if (instance == null) {
 						throw IllegalAccessException("Application is null")
 					}
-					if (db == null && instance != null) {
-						db = Room.databaseBuilder(instance!!.applicationContext,LoginDB::class.java,NAME_DB)
-							.allowMainThreadQueries()
-							.build()
-					}
+					db = Room.databaseBuilder(
+						instance!!.applicationContext,
+						LoginDB::class.java,
+						NAME_DB
+					)
+						.allowMainThreadQueries()
+						.build()
 				}
 			}
 			return db!!.loginDao()
 		}
-	}
-
-	override fun onCreate() {
-		super.onCreate()
-		instance = this
 	}
 }
