@@ -24,7 +24,7 @@ class LoginPresenter : LoginContract.LoginPresenterInterface {
 					view?.showLayoutAccount(result)
 				} else {
 					view?.showLayoutSing()
-					view?.setError(R.string.error.toString())
+					view?.setError("Неверный логин или пароль!")
 				}
 			}
 

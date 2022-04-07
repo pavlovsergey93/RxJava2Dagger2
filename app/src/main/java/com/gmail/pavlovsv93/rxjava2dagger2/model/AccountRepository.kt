@@ -14,7 +14,7 @@ interface AccountRepositoryInterface {
 	fun getAllAccount(callback: Callback<List<LoginEntity>>)
 	fun deleteAccount(login: String, callback: Callback<LoginEntity>)
 	fun updateAccount(
-		account: LoginEntity,
+		login: String,
 		password: String? = null,
 		email: String? = null,
 		callback: Callback<LoginEntity>
@@ -28,6 +28,7 @@ interface AccountRepositoryInterface {
 	)
 
 	fun getCheckedLogin(login: String, email: String): Boolean
+	fun getAccount(login: String, callback: Callback<LoginEntity>)
 }
 
 class AccountRepository(private val localDataSource: LoginDAO) : AccountRepositoryInterface {
@@ -92,9 +93,7 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 					index?.let {
 						localDataSource.deleteAccount(localList[it])
 						callback.onSuccess(null)
-					}
-					callback.onError("Ошибка удаления")
-
+					} ?: throw IllegalArgumentException("Ошибка удаления")
 				}
 
 			} catch (exc: Exception) {
@@ -104,41 +103,55 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 	}
 
 	override fun updateAccount(
-		account: LoginEntity,
+		login: String,
 		password: String?,
 		email: String?,
 		callback: Callback<LoginEntity>
 	) {
 		executor.execute {
 			try {
-				var updateData: LoginEntity? = null
+				var index: Int? = null
 				val localList: List<LoginEntity> = getAllLocalAccount()
 				for (i in localList.indices) {
-					if (localList[i].login == account.login) {
-						updateData = localList[i]
-						localDataSource.updateAccount(localList[i])
+					if (localList[i].login == login) {
+						index = i
 						break
 					}
 				}
-				if (password != null) {
-					updateData?.password = password
-				}
-				if (email != null) {
-					updateData?.email = email
-				}
-				if (updateData != null) {
-					localDataSource.updateAccount(updateData)
-				}
-				handler.post {
-					if (updateData != null) {
-						callback.onSuccess(updateData)
+				if (index != null) {
+					if (password != "") {
+						localList[index].password = password
+					}
+					if (email != "") {
+						localList[index].email = email
+					} else {
+						throw IllegalArgumentException("Email не задан или используется")
 					}
 				}
-
+				handler.post {
+					index?.let {
+						localDataSource.updateAccount(localList[index])
+						callback.onSuccess(localList[index])
+					} ?: throw IllegalArgumentException("Ошибка обновления")
+				}
 			} catch (exc: Exception) {
 				callback.onError(exc.toString())
 			}
 		}
+	}
+
+	private fun checkedEmail(email: String?): Boolean {
+		var index: Int? = null
+		val localList: List<LoginEntity> = getAllLocalAccount()
+		if (email != "") {
+			for (i in localList.indices) {
+				if (localList[i].email == email) {
+					index = i
+					break
+				}
+			}
+		}
+		return index != null
 	}
 
 	override fun insertAccount(
@@ -152,20 +165,11 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 				Thread.sleep(3000)
 				val localList: List<LoginEntity> = getAllLocalAccount()
 				for (i in localList.indices) {
-					when {
-						localList[i].login == login -> {
-							handler.post {
-								callback.onError((R.string.error_login).toString())
-							}
-						}
-						localList[i].email == email -> {
-							handler.post {
-								callback.onError((R.string.email_error).toString())
-							}
-						}
-						else -> {
-							continue
-						}
+					if (localList[i].login == login) {
+						throw IllegalArgumentException("Такой логин уже существует")
+					}
+					if (localList[i].email == email) {
+						throw IllegalArgumentException("На этот E-mail зарегистрирован аккаунт")
 					}
 				}
 				val newAccount =
@@ -174,7 +178,6 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 					localDataSource.registration(newAccount)
 					callback.onSuccess(newAccount)
 				}
-
 			} catch (exc: Exception) {
 				callback.onError(exc.toString())
 			}
@@ -193,5 +196,25 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 		return index != null
 	}
 
+	override fun getAccount(login: String, callback: Callback<LoginEntity>) {
+		executor.execute {
+			try {
+				var index: Int? = null
 
+				val localList: List<LoginEntity> = getAllLocalAccount()
+				for (i in localList.indices) {
+					if (localList[i].login == login) {
+						index = i
+						break
+					}
+				}
+				handler.post {
+					index?.let { callback.onSuccess(localList[index]) }
+						?: throw IllegalArgumentException("Данные не найдены")
+				}
+			} catch (exc: Exception) {
+				callback.onError(exc.toString())
+			}
+		}
+	}
 }

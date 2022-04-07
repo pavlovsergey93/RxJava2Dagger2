@@ -19,14 +19,15 @@ class RegistrationPresenter(private var view: RegistrationContract.RegistrationV
 
 			override fun onError(error: String) {
 				view?.showError(error)
+				view?.hideProgress()
 			}
 		})
 	}
 
 
-	override fun onUpdateAccount(account: LoginEntity, password: String?, email: String?) {
+	override fun onUpdateAccount(login: String, password: String?, email: String?) {
 		view?.showProgress()
-		repo.updateAccount(account, password, email, object : Callback<LoginEntity> {
+		repo.updateAccount(login, password, email, object : Callback<LoginEntity> {
 			override fun onSuccess(result: LoginEntity?) {
 				view?.hideProgress()
 				result?.let {
@@ -35,6 +36,21 @@ class RegistrationPresenter(private var view: RegistrationContract.RegistrationV
 			}
 
 			override fun onError(error: String) {
+				view?.hideProgress()
+				view?.showError(error)
+			}
+		})
+	}
+
+	override fun getDataAccount(login: String){
+		repo.getAccount(login, object : Callback<LoginEntity>{
+			override fun onSuccess(result: LoginEntity?) {
+				view?.hideProgress()
+				result?.let { view?.setView(result) }
+			}
+
+			override fun onError(error: String) {
+				view?.hideProgress()
 				view?.showError(error)
 			}
 		})

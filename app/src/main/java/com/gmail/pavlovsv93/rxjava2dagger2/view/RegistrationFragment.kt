@@ -1,19 +1,22 @@
 package com.gmail.pavlovsv93.rxjava2dagger2.view
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.gmail.pavlovsv93.rxjava2dagger2.LoginContract
 import com.gmail.pavlovsv93.rxjava2dagger2.R
 import com.gmail.pavlovsv93.rxjava2dagger2.RegistrationContract
 import com.gmail.pavlovsv93.rxjava2dagger2.databinding.FragmentRegistrationBinding
 import com.gmail.pavlovsv93.rxjava2dagger2.model.LoginEntity
-import com.gmail.pavlovsv93.rxjava2dagger2.presenter.LoginPresenter
 import com.gmail.pavlovsv93.rxjava2dagger2.presenter.RegistrationPresenter
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.showSnackBarNoAction
+import org.jetbrains.annotations.NotNull
 
 class RegistrationFragment : Fragment(), RegistrationContract.RegistrationViewInterface {
 
@@ -21,9 +24,10 @@ class RegistrationFragment : Fragment(), RegistrationContract.RegistrationViewIn
 	private val binding get() = _binding!!
 	private val presenter: RegistrationContract.RegistrationPresenterInterface =
 		RegistrationPresenter(this)
-	private var flag : Boolean = true
+	private var flag: Boolean = true
 
-	private var accountUpdate: String? = null
+	private var accountLogin: String? = null
+	private var accountUpdate: LoginEntity? = null
 
 	companion object {
 		fun newInstance() = RegistrationFragment()
@@ -51,16 +55,12 @@ class RegistrationFragment : Fragment(), RegistrationContract.RegistrationViewIn
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		if (arguments != null) {
-			accountUpdate = arguments?.getString(KEY_ACCOUNT_UPDATE)
-			if (accountUpdate != null) {
-				binding.login.setText(accountUpdate!!.login)
-				binding.login.isClickable = false
-				binding.password.setText(accountUpdate!!.password)
-				binding.password2.setText(accountUpdate!!.password)
-				binding.email.setText(accountUpdate!!.email)
+			accountLogin = arguments?.getString(KEY_ACCOUNT_UPDATE)
+			if (accountLogin != null) {
+				presenter.getDataAccount(accountLogin!!)
 			}
 		}
-		if (accountUpdate != null) {
+		if (accountLogin != null) {
 			binding.btnRegistration.setText(R.string.save)
 		} else {
 			binding.btnRegistration.setText(R.string.registration)
@@ -71,16 +71,22 @@ class RegistrationFragment : Fragment(), RegistrationContract.RegistrationViewIn
 			val password: String = binding.password.text.toString()
 			val email: String = binding.email.text.toString()
 			if (binding.password.text.toString() == binding.password2.text.toString()) {
-				presenter.onCheckedAccount(login, email)
-				if (!flag) {
-					if (binding.login.text != null && binding.email.text != null) {
-						if (accountUpdate != null) {
-							presenter.onUpdateAccount(accountUpdate!!, password, email)
-						} else {
+				if (accountLogin != null) {
+					presenter.onUpdateAccount(login, password, email)
+				} else {
+					presenter.onCheckedAccount(login, email)
+					if (!flag) {
+						if (binding.login.text.toString() != "" && binding.email.text.toString() != "") {
 							presenter.onInsertAccount(login, password, email)
+						} else {
+							showError("Не заполнены все поля!")
 						}
+					}else{
+						showError("Логин или email уже используются!")
 					}
 				}
+			} else {
+				showError("Пароли не совпадают")
 			}
 		}
 	}
@@ -94,21 +100,25 @@ class RegistrationFragment : Fragment(), RegistrationContract.RegistrationViewIn
 	}
 
 	override fun showError(error: String) {
-		hideProgress()
 		binding.login.showSnackBarNoAction(error)
 	}
 
-	override fun showEmpty() {
-		hideProgress()
-		binding.login.showSnackBarNoAction(requireActivity().getString(R.string.error_registration))
-	}
-
 	override fun showSaved() {
-		hideProgress()
 		binding.login.showSnackBarNoAction(requireActivity().getString(R.string.saved_registration))
+		requireActivity().supportFragmentManager.beginTransaction()
+			.replace(R.id.fragment_container, LoginFragment.newInstance())
+			.commit()
 	}
 
 	override fun checkedAccount(result: Boolean?) {
 		result?.let { flag = result }
+	}
+
+	override fun setView(account: LoginEntity) {
+		binding.login.setText(account.login)
+		binding.login.isClickable = false
+		binding.password.setText(account.password)
+		binding.password2.setText(account.password)
+		binding.email.setText(account.email)
 	}
 }
