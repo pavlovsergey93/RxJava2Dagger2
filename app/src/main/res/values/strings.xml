@@ -18,4 +18,6 @@
 	<string name="error_registration">Введены некоректные данные!</string>
 	<string name="saved_registration">Аккаунт сохранен успешно!</string>
 	<string name="exit">Выход</string>
+	<string name="forgot_password_message">Введите логин или e-mail</string>
+	<string name="find">Искать</string>
 </resources>

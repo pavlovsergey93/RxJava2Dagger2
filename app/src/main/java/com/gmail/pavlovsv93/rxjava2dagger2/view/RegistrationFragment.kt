@@ -43,6 +43,11 @@ class RegistrationFragment : Fragment(), RegistrationContract.RegistrationViewIn
 		}
 	}
 
+	override fun onDestroy() {
+		super.onDestroy()
+		_binding == null
+	}
+
 	override fun onCreateView(
 		inflater: LayoutInflater,
 		container: ViewGroup?,

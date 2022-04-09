@@ -34,6 +34,16 @@ class LoginFragment : Fragment(), LoginContract.LoginViewInterface {
 		}
 	}
 
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		this.retainInstance = true
+	}
+
+	override fun onDestroy() {
+		super.onDestroy()
+		_binding == null
+	}
+
 	override fun onCreateView(
 		inflater: LayoutInflater,
 		container: ViewGroup?,
@@ -65,8 +75,8 @@ class LoginFragment : Fragment(), LoginContract.LoginViewInterface {
 		//Обработка нажатия на "Удалить аккаунт"
 		binding.deleteAccount.setOnClickListener {
 			val login = binding.login.text.toString()
-				presenter.onDeleteAccount(login)
-				showLayoutSing()
+			presenter.onDeleteAccount(login)
+			showLayoutSing()
 		}
 
 		//Обработка нажатия на "Обновить аккаунт"
@@ -74,12 +84,20 @@ class LoginFragment : Fragment(), LoginContract.LoginViewInterface {
 			val login = binding.login.text.toString()
 			requireActivity().supportFragmentManager.beginTransaction()
 				.replace(R.id.fragment_container, RegistrationFragment.updateInstance(login))
-				.addToBackStack(login)
+				.addToBackStack("RegistrationFragment")
 				.commit()
 		}
 		//Обработка нажатия "Выход"
 		binding.exit.setOnClickListener {
 			showLayoutSing()
+		}
+
+		// Обработка нажатия "Забыл пароль"
+		binding.forgotPassword.setOnClickListener {
+			requireActivity().supportFragmentManager.beginTransaction()
+				.replace(R.id.fragment_container, ForgetPasswordFragment.newInstance())
+				.addToBackStack("ForgetPasswordFragment")
+				.commit()
 		}
 
 	}

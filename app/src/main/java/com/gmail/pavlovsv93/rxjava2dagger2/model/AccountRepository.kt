@@ -2,9 +2,7 @@ package com.gmail.pavlovsv93.rxjava2dagger2.model
 
 import android.os.Handler
 import android.os.Looper
-import com.gmail.pavlovsv93.rxjava2dagger2.R
 import java.lang.Exception
-import java.util.*
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
@@ -29,6 +27,7 @@ interface AccountRepositoryInterface {
 
 	fun getCheckedLogin(login: String, email: String): Boolean
 	fun getAccount(login: String, callback: Callback<LoginEntity>)
+	fun findAccount(data: String, callback: Callback<LoginEntity>)
 }
 
 class AccountRepository(private val localDataSource: LoginDAO) : AccountRepositoryInterface {
@@ -140,20 +139,6 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 		}
 	}
 
-	private fun checkedEmail(email: String?): Boolean {
-		var index: Int? = null
-		val localList: List<LoginEntity> = getAllLocalAccount()
-		if (email != "") {
-			for (i in localList.indices) {
-				if (localList[i].email == email) {
-					index = i
-					break
-				}
-			}
-		}
-		return index != null
-	}
-
 	override fun insertAccount(
 		login: String,
 		password: String,
@@ -211,6 +196,29 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 				handler.post {
 					index?.let { callback.onSuccess(localList[index]) }
 						?: throw IllegalArgumentException("Данные не найдены")
+				}
+			} catch (exc: Exception) {
+				callback.onError(exc.toString())
+			}
+		}
+	}
+
+	override fun findAccount(data: String, callback: Callback<LoginEntity>) {
+		executor.execute {
+			try {
+				var index: Int? = null
+				val localList: List<LoginEntity> = getAllLocalAccount()
+				for (i in localList.indices) {
+					if (localList[i].login == data || localList[i].email == data) {
+						index = i
+						break
+					}
+				}
+				if (index == null){
+					throw IllegalArgumentException("Данные не найдены")
+				}
+				handler.post {
+					index.let { callback.onSuccess(localList[index]) }
 				}
 			} catch (exc: Exception) {
 				callback.onError(exc.toString())
