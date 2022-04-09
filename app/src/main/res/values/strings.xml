@@ -1,3 +1,23 @@
 <resources>
 	<string name="app_name">rxjava2_dagger2</string>
+	<string name="hint_login">Логин</string>
+	<string name="hint_password">Пароль</string>
+	<string name="sing_in">Войти</string>
+	<string name="registration">Регистрация</string>
+	<string name="forgot_password">Забыл пароль</string>
+	<string name="error">Неверный логин или пароль!</string>
+	<string name="error_login">Такой логин уже существует</string>
+	<string name="email_error">На этот E-mail зарегистрирован аккаунт</string>
+	<string name="delete_account">Удалить Аккаунт</string>
+	<string name="delete_account_state">Аккаунт удален</string>
+	<string name="update_account">Обновить данные</string>
+	<string name="update_account_state">Аккаунт обнавлен</string>
+	<string name="hint_password2">Повторить пароль</string>
+	<string name="hint_email">E-mail</string>
+	<string name="save">Сохранить</string>
+	<string name="error_registration">Введены некоректные данные!</string>
+	<string name="saved_registration">Аккаунт сохранен успешно!</string>
+	<string name="exit">Выход</string>
+	<string name="forgot_password_message">Введите логин или e-mail</string>
+	<string name="find">Искать</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.gmail.pavlovsv93.rxjava2_dagger2
+package com.gmail.pavlovsv93.rxjava2dagger2
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
