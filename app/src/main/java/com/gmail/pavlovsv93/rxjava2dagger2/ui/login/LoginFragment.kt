@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.gmail.pavlovsv93.rxjava2dagger2.R
+import com.gmail.pavlovsv93.rxjava2dagger2.app
 import com.gmail.pavlovsv93.rxjava2dagger2.databinding.FragmentLoginBinding
 import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginEntity
 import com.gmail.pavlovsv93.rxjava2dagger2.ui.registration.RegistrationFragment
@@ -17,13 +18,14 @@ class LoginFragment : Fragment(), LoginContract.LoginViewInterface {
 
 	private var _binding: FragmentLoginBinding? = null
 	private val binding get() = _binding!!
-	private val presenter: LoginContract.LoginPresenterInterface = LoginPresenter()
+	private val presenter: LoginContract.LoginPresenterInterface by lazy {
+		LoginPresenter(view = this, repo = requireActivity().app.repo)
+	}
 
 	companion object {
 		fun newInstance() = LoginFragment()
 
 		const val KEY_ACCOUNT_SAVE = "KEY_ACCOUNT_SAVE"
-
 		fun saveInstance(login: String): RegistrationFragment {
 			return RegistrationFragment().apply {
 				arguments = Bundle().apply {
@@ -49,7 +51,6 @@ class LoginFragment : Fragment(), LoginContract.LoginViewInterface {
 		savedInstanceState: Bundle?
 	): View? {
 		_binding = FragmentLoginBinding.inflate(inflater, container, false)
-		presenter.onAttachView(this)
 		return binding.root
 	}
 

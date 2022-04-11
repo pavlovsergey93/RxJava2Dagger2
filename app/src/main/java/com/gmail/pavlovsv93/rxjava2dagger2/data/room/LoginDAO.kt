@@ -1,4 +1,4 @@
-package com.gmail.pavlovsv93.rxjava2dagger2.domain
+package com.gmail.pavlovsv93.rxjava2dagger2.data.room
 
 import androidx.room.*
 import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginEntity

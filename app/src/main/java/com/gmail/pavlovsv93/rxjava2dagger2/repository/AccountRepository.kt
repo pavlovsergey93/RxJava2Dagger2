@@ -3,7 +3,7 @@ package com.gmail.pavlovsv93.rxjava2dagger2.repository
 import android.os.Handler
 import android.os.Looper
 import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginEntity
-import com.gmail.pavlovsv93.rxjava2dagger2.domain.LoginDAO
+import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginDAO
 import java.lang.Exception
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors

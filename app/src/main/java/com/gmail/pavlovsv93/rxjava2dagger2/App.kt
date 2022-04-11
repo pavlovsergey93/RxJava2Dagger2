@@ -1,11 +1,18 @@
 package com.gmail.pavlovsv93.rxjava2dagger2
 
 import android.app.Application
+import android.content.Context
 import androidx.room.Room
-import com.gmail.pavlovsv93.rxjava2dagger2.domain.LoginDAO
+import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginDAO
 import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginDB
+import com.gmail.pavlovsv93.rxjava2dagger2.repository.AccountRepository
+import com.gmail.pavlovsv93.rxjava2dagger2.repository.AccountRepositoryInterface
 
-class AppDB : Application() {
+class App : Application() {
+
+	val repo: AccountRepositoryInterface by lazy {
+		AccountRepository(getLoginDao())
+	}
 
 	override fun onCreate() {
 		super.onCreate()
@@ -13,11 +20,11 @@ class AppDB : Application() {
 	}
 
 	companion object {
-		private var instance: AppDB? = null
+		private var instance: App? = null
 		private var db: LoginDB? = null
 		private const val NAME_DB = "ACCOUNT"
 
-		fun getLoginDao(): LoginDAO {
+		private fun getLoginDao(): LoginDAO {
 			if (db == null) {
 				synchronized(LoginDB::class.java) {
 					if (instance == null) {
@@ -36,3 +43,6 @@ class AppDB : Application() {
 		}
 	}
 }
+
+val Context.app: App
+	get() = this.applicationContext as App

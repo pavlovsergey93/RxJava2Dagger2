@@ -1,14 +1,15 @@
 package com.gmail.pavlovsv93.rxjava2dagger2.ui.forget.password
 
 import com.gmail.pavlovsv93.rxjava2dagger2.repository.AccountRepository
-import com.gmail.pavlovsv93.rxjava2dagger2.AppDB
+import com.gmail.pavlovsv93.rxjava2dagger2.App
 import com.gmail.pavlovsv93.rxjava2dagger2.repository.Callback
 import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginEntity
+import com.gmail.pavlovsv93.rxjava2dagger2.repository.AccountRepositoryInterface
 
-class ForgetPasswordPresenter(private var view: ForgetPasswordContract.ForgetPasswordViewInterface) :
-	ForgetPasswordContract.ForgetPasswordPresenterInterface {
-
-	private val repo: AccountRepository = AccountRepository(AppDB.getLoginDao())
+class ForgetPasswordPresenter(
+	private var view: ForgetPasswordContract.ForgetPasswordViewInterface,
+	private val repo: AccountRepositoryInterface
+) : ForgetPasswordContract.ForgetPasswordPresenterInterface {
 
 	override fun findAccount(data: String) {
 		view.showProgress()

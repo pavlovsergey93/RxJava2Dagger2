@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.gmail.pavlovsv93.rxjava2dagger2.R
+import com.gmail.pavlovsv93.rxjava2dagger2.app
 import com.gmail.pavlovsv93.rxjava2dagger2.databinding.FragmentRegistrationBinding
 import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginEntity
 import com.gmail.pavlovsv93.rxjava2dagger2.ui.login.LoginFragment
@@ -16,12 +17,11 @@ class RegistrationFragment : Fragment(), RegistrationContract.RegistrationViewIn
 
 	private var _binding: FragmentRegistrationBinding? = null
 	private val binding get() = _binding!!
-	private val presenter: RegistrationContract.RegistrationPresenterInterface =
-		RegistrationPresenter(this)
+	private val presenter: RegistrationContract.RegistrationPresenterInterface by lazy {
+		RegistrationPresenter(view = this, repo = requireActivity().app.repo)
+	}
 	private var flag: Boolean = true
-
 	private var accountLogin: String? = null
-	private var accountUpdate: LoginEntity? = null
 
 	companion object {
 		fun newInstance() = RegistrationFragment()

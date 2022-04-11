@@ -6,16 +6,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import com.gmail.pavlovsv93.rxjava2dagger2.App
+import com.gmail.pavlovsv93.rxjava2dagger2.app
 import com.gmail.pavlovsv93.rxjava2dagger2.databinding.FragmentForgotPasswordBinding
 import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginEntity
+import com.gmail.pavlovsv93.rxjava2dagger2.repository.AccountRepositoryInterface
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.showSnackBarNoAction
 
 class ForgetPasswordFragment : Fragment(), ForgetPasswordContract.ForgetPasswordViewInterface {
 
 	private var _binding: FragmentForgotPasswordBinding? = null
 	private val binding get() = _binding!!
-	private val presenter: ForgetPasswordContract.ForgetPasswordPresenterInterface =
-		ForgetPasswordPresenter(this)
+
+	private val presenter: ForgetPasswordContract.ForgetPasswordPresenterInterface by lazy {
+		ForgetPasswordPresenter(view = this,repo = requireActivity().app.repo)
+	}
 
 	companion object {
 		fun newInstance() = ForgetPasswordFragment()
