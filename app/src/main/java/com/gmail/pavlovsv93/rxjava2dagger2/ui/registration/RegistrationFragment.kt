@@ -27,7 +27,6 @@ class RegistrationFragment : Fragment(), RegistrationContract.RegistrationViewIn
 		fun newInstance() = RegistrationFragment()
 
 		const val KEY_ACCOUNT_UPDATE = "KEY_ACCOUNT_UPDATE"
-
 		fun updateInstance(login: String): RegistrationFragment {
 			return RegistrationFragment().apply {
 				arguments = Bundle().apply {
@@ -60,27 +59,27 @@ class RegistrationFragment : Fragment(), RegistrationContract.RegistrationViewIn
 			}
 		}
 		if (accountLogin != null) {
-			binding.btnRegistration.setText(R.string.save)
+			binding.registrationButton.setText(R.string.save)
 		} else {
-			binding.btnRegistration.setText(R.string.registration)
+			binding.registrationButton.setText(R.string.registration)
 		}
 
-		binding.btnRegistration.setOnClickListener {
-			val login: String = binding.login.text.toString()
-			val password: String = binding.password.text.toString()
-			val email: String = binding.email.text.toString()
-			if (binding.password.text.toString() == binding.password2.text.toString()) {
+		binding.registrationButton.setOnClickListener {
+			val login: String = binding.loginEditText.text.toString()
+			val password: String = binding.passwordEditText.text.toString()
+			val email: String = binding.emailEditText.text.toString()
+			if (binding.passwordEditText.text.toString() == binding.repeatPasswordEditText.text.toString()) {
 				if (accountLogin != null) {
 					presenter.onUpdateAccount(login, password, email)
 				} else {
 					presenter.onCheckedAccount(login, email)
 					if (!flag) {
-						if (binding.login.text.toString() != "" && binding.email.text.toString() != "") {
+						if (binding.loginEditText.text.toString() != "" && binding.emailEditText.text.toString() != "") {
 							presenter.onInsertAccount(login, password, email)
 						} else {
 							showError("Не заполнены все поля!")
 						}
-					}else{
+					} else {
 						showError("Логин или email уже используются!")
 					}
 				}
@@ -91,21 +90,21 @@ class RegistrationFragment : Fragment(), RegistrationContract.RegistrationViewIn
 	}
 
 	override fun showProgress() {
-		binding.registrationProgressBar.isVisible = true
+		binding.fragmentRegistrationProgressBar.isVisible = true
 	}
 
 	override fun hideProgress() {
-		binding.registrationProgressBar.isVisible = false
+		binding.fragmentRegistrationProgressBar.isVisible = false
 	}
 
 	override fun showError(error: String) {
-		binding.login.showSnackBarNoAction(error)
+		binding.loginEditText.showSnackBarNoAction(error)
 	}
 
 	override fun showSaved() {
-		binding.login.showSnackBarNoAction(requireActivity().getString(R.string.saved_registration))
+		binding.loginEditText.showSnackBarNoAction(requireActivity().getString(R.string.saved_registration))
 		requireActivity().supportFragmentManager.beginTransaction()
-			.replace(R.id.fragment_container, LoginFragment.newInstance())
+			.replace(R.id.fragment_container_view, LoginFragment.newInstance())
 			.commit()
 	}
 
@@ -114,10 +113,10 @@ class RegistrationFragment : Fragment(), RegistrationContract.RegistrationViewIn
 	}
 
 	override fun setView(account: LoginEntity) {
-		binding.login.setText(account.login)
-		binding.login.isClickable = false
-		binding.password.setText(account.password)
-		binding.password2.setText(account.password)
-		binding.email.setText(account.email)
+		binding.loginEditText.setText(account.login)
+		binding.loginEditText.isClickable = false
+		binding.passwordEditText.setText(account.password)
+		binding.repeatPasswordEditText.setText(account.password)
+		binding.emailEditText.setText(account.email)
 	}
 }

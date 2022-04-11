@@ -23,7 +23,6 @@ class RegistrationPresenter(private var view: RegistrationContract.RegistrationV
 		})
 	}
 
-
 	override fun onUpdateAccount(login: String, password: String?, email: String?) {
 		view?.showProgress()
 		repo.updateAccount(login, password, email, object : Callback<LoginEntity> {

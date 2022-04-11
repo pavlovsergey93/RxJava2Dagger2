@@ -16,7 +16,6 @@ class LoginPresenter : LoginContract.LoginPresenterInterface {
 		this.view = attachView
 	}
 
-
 	override fun onAuthorization(login: String, password: String) {
 		view?.showProgress()
 		repo.getAuthorization(login, password, object : Callback<LoginEntity> {
@@ -34,7 +33,6 @@ class LoginPresenter : LoginContract.LoginPresenterInterface {
 				view?.showLayoutSing()
 				view?.setError(error)
 			}
-
 		})
 	}
 
@@ -52,7 +50,5 @@ class LoginPresenter : LoginContract.LoginPresenterInterface {
 			}
 		})
 	}
-
-
 }
 

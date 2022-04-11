@@ -11,7 +11,7 @@ class ForgetPasswordPresenter(private var view: ForgetPasswordContract.ForgetPas
 	private val repo: AccountRepository = AccountRepository(AppDB.getLoginDao())
 
 	override fun findAccount(data: String) {
-		view?.showProgress()
+		view.showProgress()
 		repo.findAccount(data, object : Callback<LoginEntity> {
 			override fun onSuccess(result: LoginEntity?) {
 				view.hideProgress()

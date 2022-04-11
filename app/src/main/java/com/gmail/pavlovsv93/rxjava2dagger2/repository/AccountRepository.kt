@@ -216,7 +216,7 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 						break
 					}
 				}
-				if (index == null){
+				if (index == null) {
 					throw IllegalArgumentException("Данные не найдены")
 				}
 				handler.post {

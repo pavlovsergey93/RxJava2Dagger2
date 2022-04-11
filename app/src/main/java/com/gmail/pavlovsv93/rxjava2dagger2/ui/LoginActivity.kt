@@ -16,23 +16,21 @@ class LoginActivity : AppCompatActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_login)
-
-		if(savedInstanceState != null){
+		if (savedInstanceState != null) {
 			loginFragmentFlag = savedInstanceState.getBoolean(SAVE_FRAGMENT_ARG)
 		}
-
 		if (loginFragmentFlag) {
 			supportFragmentManager.findFragmentByTag(SAVE_FRAGMENT_TAG) as LoginFragment
 		} else {
 			loginFragmentFlag = true
 			supportFragmentManager.beginTransaction()
-				.replace(R.id.fragment_container, LoginFragment.newInstance(), SAVE_FRAGMENT_TAG)
+				.replace(
+					R.id.fragment_container_view,
+					LoginFragment.newInstance(),
+					SAVE_FRAGMENT_TAG
+				)
 				.commit()
 		}
-//		supportFragmentManager.beginTransaction()
-//			.replace(R.id.fragment_container, LoginFragment.newInstance())
-//			.commit()
-
 	}
 
 	override fun onRetainCustomNonConfigurationInstance(): Any? {
@@ -40,7 +38,7 @@ class LoginActivity : AppCompatActivity() {
 	}
 
 	private fun restoreFragment(): LoginFragment {
-		val fragment = getLastCustomNonConfigurationInstance() as? LoginFragment
+		val fragment = lastCustomNonConfigurationInstance as? LoginFragment
 		return fragment ?: LoginFragment()
 	}
 

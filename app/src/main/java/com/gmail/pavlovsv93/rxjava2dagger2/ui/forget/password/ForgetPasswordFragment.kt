@@ -14,9 +14,10 @@ class ForgetPasswordFragment : Fragment(), ForgetPasswordContract.ForgetPassword
 
 	private var _binding: FragmentForgotPasswordBinding? = null
 	private val binding get() = _binding!!
-	val presenter: ForgetPasswordContract.ForgetPasswordPresenterInterface = ForgetPasswordPresenter(this)
+	private val presenter: ForgetPasswordContract.ForgetPasswordPresenterInterface =
+		ForgetPasswordPresenter(this)
 
-	companion object{
+	companion object {
 		fun newInstance() = ForgetPasswordFragment()
 	}
 
@@ -36,25 +37,26 @@ class ForgetPasswordFragment : Fragment(), ForgetPasswordContract.ForgetPassword
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		binding.ffpBtnFind.setOnClickListener {
-			var findAccount = binding.ffpEditText.text.toString()
+		binding.forgotPasswordFindButton.setOnClickListener {
+			var findAccount = binding.forgotPasswordEditText.text.toString()
 			presenter.findAccount(findAccount)
 		}
 	}
 
 	override fun showProgress() {
-		binding.ffpProgressBar.isVisible = true
+		binding.fragmentForgotPasswordProgressBar.isVisible = true
 	}
 
 	override fun hideProgress() {
-		binding.ffpProgressBar.isVisible = false
+		binding.fragmentForgotPasswordProgressBar.isVisible = false
 	}
 
 	override fun setDataAccount(account: LoginEntity) {
-		binding.ffpTextView.text = "Логин: ${account.login}\nПароль: ${account.password}\nE-mail: ${account.email}"
+		binding.forgotPasswordResultFindTextView.text =
+			"Логин: ${account.login}\nПароль: ${account.password}\nE-mail: ${account.email}"
 	}
 
 	override fun setError(error: String) {
-		binding.ffpBtnFind.showSnackBarNoAction(error)
+		binding.forgotPasswordFindButton.showSnackBarNoAction(error)
 	}
 }
