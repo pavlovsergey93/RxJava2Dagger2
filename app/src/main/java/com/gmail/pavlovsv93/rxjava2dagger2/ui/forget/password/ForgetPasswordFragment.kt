@@ -1,4 +1,4 @@
-package com.gmail.pavlovsv93.rxjava2dagger2.view
+package com.gmail.pavlovsv93.rxjava2dagger2.ui.forget.password
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,10 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.gmail.pavlovsv93.rxjava2dagger2.ForgetPasswordContract
 import com.gmail.pavlovsv93.rxjava2dagger2.databinding.FragmentForgotPasswordBinding
-import com.gmail.pavlovsv93.rxjava2dagger2.model.LoginEntity
-import com.gmail.pavlovsv93.rxjava2dagger2.presenter.ForgetPasswordPresenter
+import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginEntity
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.showSnackBarNoAction
 
 class ForgetPasswordFragment : Fragment(), ForgetPasswordContract.ForgetPasswordViewInterface {

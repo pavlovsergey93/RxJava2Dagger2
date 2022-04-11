@@ -1,8 +1,10 @@
-package com.gmail.pavlovsv93.rxjava2dagger2.presenter
+package com.gmail.pavlovsv93.rxjava2dagger2.ui.login
 
-import com.gmail.pavlovsv93.rxjava2dagger2.LoginContract
+import com.gmail.pavlovsv93.rxjava2dagger2.AppDB
+import com.gmail.pavlovsv93.rxjava2dagger2.ui.login.LoginContract
 import com.gmail.pavlovsv93.rxjava2dagger2.R
-import com.gmail.pavlovsv93.rxjava2dagger2.model.*
+import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginEntity
+import com.gmail.pavlovsv93.rxjava2dagger2.repository.*
 
 class LoginPresenter : LoginContract.LoginPresenterInterface {
 

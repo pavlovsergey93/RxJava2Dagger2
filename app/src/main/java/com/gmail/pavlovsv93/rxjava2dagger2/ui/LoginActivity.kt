@@ -1,11 +1,9 @@
-package com.gmail.pavlovsv93.rxjava2dagger2.view
+package com.gmail.pavlovsv93.rxjava2dagger2.ui
 
-import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.LogPrinter
 import com.gmail.pavlovsv93.rxjava2dagger2.R
-import com.gmail.pavlovsv93.rxjava2dagger2.presenter.LoginPresenter
+import com.gmail.pavlovsv93.rxjava2dagger2.ui.login.LoginFragment
 
 class LoginActivity : AppCompatActivity() {
 	private var loginFragmentFlag: Boolean = false

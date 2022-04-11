@@ -1,4 +1,4 @@
-package com.gmail.pavlovsv93.rxjava2dagger2.model
+package com.gmail.pavlovsv93.rxjava2dagger2.data.room
 
 import android.os.Parcel
 import android.os.Parcelable

@@ -1,22 +1,16 @@
-package com.gmail.pavlovsv93.rxjava2dagger2.view
+package com.gmail.pavlovsv93.rxjava2dagger2.ui.registration
 
-import android.app.Activity
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.gmail.pavlovsv93.rxjava2dagger2.R
-import com.gmail.pavlovsv93.rxjava2dagger2.RegistrationContract
 import com.gmail.pavlovsv93.rxjava2dagger2.databinding.FragmentRegistrationBinding
-import com.gmail.pavlovsv93.rxjava2dagger2.model.LoginEntity
-import com.gmail.pavlovsv93.rxjava2dagger2.presenter.RegistrationPresenter
+import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginEntity
+import com.gmail.pavlovsv93.rxjava2dagger2.ui.login.LoginFragment
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.showSnackBarNoAction
-import org.jetbrains.annotations.NotNull
 
 class RegistrationFragment : Fragment(), RegistrationContract.RegistrationViewInterface {
 

@@ -1,4 +1,4 @@
-package com.gmail.pavlovsv93.rxjava2dagger2.view
+package com.gmail.pavlovsv93.rxjava2dagger2.ui.login
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,13 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.gmail.pavlovsv93.rxjava2dagger2.LoginContract
 import com.gmail.pavlovsv93.rxjava2dagger2.R
 import com.gmail.pavlovsv93.rxjava2dagger2.databinding.FragmentLoginBinding
-import com.gmail.pavlovsv93.rxjava2dagger2.model.LoginEntity
-import com.gmail.pavlovsv93.rxjava2dagger2.presenter.LoginPresenter
+import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginEntity
+import com.gmail.pavlovsv93.rxjava2dagger2.ui.registration.RegistrationFragment
+import com.gmail.pavlovsv93.rxjava2dagger2.ui.forget.password.ForgetPasswordFragment
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.showSnackBarNoAction
-import com.google.android.material.snackbar.Snackbar
 
 class LoginFragment : Fragment(), LoginContract.LoginViewInterface {
 

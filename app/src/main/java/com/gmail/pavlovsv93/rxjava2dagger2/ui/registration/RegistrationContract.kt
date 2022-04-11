@@ -1,6 +1,6 @@
-package com.gmail.pavlovsv93.rxjava2dagger2
+package com.gmail.pavlovsv93.rxjava2dagger2.ui.registration
 
-import com.gmail.pavlovsv93.rxjava2dagger2.model.LoginEntity
+import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginEntity
 
 class RegistrationContract {
 	interface RegistrationViewInterface{

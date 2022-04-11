@@ -1,6 +1,7 @@
-package com.gmail.pavlovsv93.rxjava2dagger2.model
+package com.gmail.pavlovsv93.rxjava2dagger2.domain
 
 import androidx.room.*
+import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginEntity
 
 @Dao
 interface LoginDAO {

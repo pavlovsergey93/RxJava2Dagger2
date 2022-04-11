@@ -1,7 +1,9 @@
-package com.gmail.pavlovsv93.rxjava2dagger2.model
+package com.gmail.pavlovsv93.rxjava2dagger2
 
 import android.app.Application
 import androidx.room.Room
+import com.gmail.pavlovsv93.rxjava2dagger2.domain.LoginDAO
+import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginDB
 
 class AppDB : Application() {
 
