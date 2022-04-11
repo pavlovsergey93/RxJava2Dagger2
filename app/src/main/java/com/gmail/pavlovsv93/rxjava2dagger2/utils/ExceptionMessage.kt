@@ -4,17 +4,17 @@ import com.gmail.pavlovsv93.rxjava2dagger2.R
 
 enum class ExceptionMessage(val message: String) {
 
-	E201(R.string.saved_registration.toString()),
-	E202(R.string.delete_account_state.toString()),
-	E400(R.string.error_login_or_email.toString()),
-	E401(R.string.error.toString()),
-	E402(R.string.error_login.toString()),
-	E403(R.string.email_error.toString()),
-	E404(R.string.error_registration.toString()),
-	E405(R.string.error_delete.toString()),
-	E406(R.string.error_email_empty.toString()),
-	E407(R.string.error_update.toString()),
-	E408(R.string.error_empty_data.toString()),
-	E409(R.string.error_password.toString()),
-	E410(R.string.error_empty.toString())
+	E201("Аккаунт сохранен успешно!"),
+	E202("Аккаунт удален"),
+	E400("Логин или email уже используются!"),
+	E401("Неверный логин или пароль!"),
+	E402("Такой логин уже существует"),
+	E403("На этот E-mail зарегистрирован аккаунт"),
+	E404("Введены некоректные данные!"),
+	E405("Ошибка удаления"),
+	E406("Email не задан или используется"),
+	E407("Ошибка обновления"),
+	E408("Данные не найдены"),
+	E409("Пароли не совпадают"),
+	E410("Не заполнены все поля!")
 }

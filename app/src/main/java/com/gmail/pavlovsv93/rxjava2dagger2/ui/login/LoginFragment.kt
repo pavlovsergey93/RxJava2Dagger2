@@ -14,6 +14,7 @@ import com.gmail.pavlovsv93.rxjava2dagger2.ui.registration.RegistrationFragment
 import com.gmail.pavlovsv93.rxjava2dagger2.ui.forget.password.ForgetPasswordFragment
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.ExceptionMessage
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.ExceptionMessage.*
+import com.gmail.pavlovsv93.rxjava2dagger2.utils.hideKeyboard
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.showSnackBarNoAction
 
 class LoginFragment : Fragment(), LoginContract.LoginViewInterface {
@@ -61,6 +62,7 @@ class LoginFragment : Fragment(), LoginContract.LoginViewInterface {
 
 		//Обработка нажатия на "Войти"
 		binding.singInButton.setOnClickListener {
+			requireActivity().hideKeyboard(requireActivity())
 			val login = binding.loginEditText.text.toString()
 			val password = binding.passwordEditText.text.toString()
 			presenter.onAuthorization(login, password)
@@ -68,6 +70,7 @@ class LoginFragment : Fragment(), LoginContract.LoginViewInterface {
 
 		// Обработка нажатия на "Регистрация"
 		binding.registrationButton.setOnClickListener {
+			requireActivity().hideKeyboard(requireActivity())
 			requireActivity().supportFragmentManager.beginTransaction()
 				.replace(R.id.fragment_container_view, RegistrationFragment.newInstance())
 				.addToBackStack(binding.registrationButton.text.toString())
@@ -97,6 +100,7 @@ class LoginFragment : Fragment(), LoginContract.LoginViewInterface {
 
 		// Обработка нажатия "Забыл пароль"
 		binding.forgotPasswordButton.setOnClickListener {
+			requireActivity().hideKeyboard(requireActivity())
 			requireActivity().supportFragmentManager.beginTransaction()
 				.replace(R.id.fragment_container_view, ForgetPasswordFragment.newInstance())
 				.addToBackStack("ForgetPasswordFragment")

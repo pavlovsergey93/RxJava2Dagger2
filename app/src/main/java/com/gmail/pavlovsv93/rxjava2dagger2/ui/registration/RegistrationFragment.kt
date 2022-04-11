@@ -13,6 +13,7 @@ import com.gmail.pavlovsv93.rxjava2dagger2.databinding.FragmentRegistrationBindi
 import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginEntity
 import com.gmail.pavlovsv93.rxjava2dagger2.ui.login.LoginFragment
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.ExceptionMessage
+import com.gmail.pavlovsv93.rxjava2dagger2.utils.hideKeyboard
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.showSnackBarNoAction
 
 class RegistrationFragment : Fragment(), RegistrationContract.RegistrationViewInterface {
@@ -67,6 +68,7 @@ class RegistrationFragment : Fragment(), RegistrationContract.RegistrationViewIn
 		}
 
 		binding.registrationButton.setOnClickListener {
+			requireActivity().hideKeyboard(requireActivity())
 			val login: String = binding.loginEditText.text.toString()
 			val password: String = binding.passwordEditText.text.toString()
 			val email: String = binding.emailEditText.text.toString()

@@ -11,6 +11,7 @@ import com.gmail.pavlovsv93.rxjava2dagger2.app
 import com.gmail.pavlovsv93.rxjava2dagger2.databinding.FragmentForgotPasswordBinding
 import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginEntity
 import com.gmail.pavlovsv93.rxjava2dagger2.repository.AccountRepositoryInterface
+import com.gmail.pavlovsv93.rxjava2dagger2.utils.hideKeyboard
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.showSnackBarNoAction
 
 class ForgetPasswordFragment : Fragment(), ForgetPasswordContract.ForgetPasswordViewInterface {
@@ -43,6 +44,7 @@ class ForgetPasswordFragment : Fragment(), ForgetPasswordContract.ForgetPassword
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		binding.forgotPasswordFindButton.setOnClickListener {
+			requireActivity().hideKeyboard(requireActivity())
 			var findAccount = binding.forgotPasswordEditText.text.toString()
 			presenter.findAccount(findAccount)
 		}

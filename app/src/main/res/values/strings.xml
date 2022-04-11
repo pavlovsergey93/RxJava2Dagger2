@@ -6,7 +6,6 @@
 	<string name="registration">Регистрация</string>
 	<string name="forgot_password">Забыл пароль</string>
 	<string name="delete_account">Удалить Аккаунт</string>
-	<string name="delete_account_state">Аккаунт удален</string>
 	<string name="update_account">Обновить данные</string>
 	<string name="update_account_state">Аккаунт обнавлен</string>
 	<string name="hint_password2">Повторить пароль</string>
@@ -28,4 +27,5 @@
 	<string name="error_empty_data">Данные не найдены</string>
 	<string name="error_password">Пароли не совпадают</string>
 	<string name="error_empty">Не заполнены все поля!</string>
+	<string name="delete_account_state">Аккаунт удален</string>
 </resources>
