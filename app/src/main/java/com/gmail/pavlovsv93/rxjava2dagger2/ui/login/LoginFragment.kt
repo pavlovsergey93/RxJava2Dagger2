@@ -9,11 +9,10 @@ import androidx.fragment.app.Fragment
 import com.gmail.pavlovsv93.rxjava2dagger2.R
 import com.gmail.pavlovsv93.rxjava2dagger2.app
 import com.gmail.pavlovsv93.rxjava2dagger2.databinding.FragmentLoginBinding
-import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginEntity
+import com.gmail.pavlovsv93.rxjava2dagger2.domain.room.LoginEntity
 import com.gmail.pavlovsv93.rxjava2dagger2.ui.registration.RegistrationFragment
 import com.gmail.pavlovsv93.rxjava2dagger2.ui.forget.password.ForgetPasswordFragment
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.ExceptionMessage
-import com.gmail.pavlovsv93.rxjava2dagger2.utils.ExceptionMessage.*
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.hideKeyboard
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.showSnackBarNoAction
 

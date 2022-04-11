@@ -1,10 +1,8 @@
 package com.gmail.pavlovsv93.rxjava2dagger2.ui.forget.password
 
-import com.gmail.pavlovsv93.rxjava2dagger2.repository.AccountRepository
-import com.gmail.pavlovsv93.rxjava2dagger2.App
-import com.gmail.pavlovsv93.rxjava2dagger2.repository.Callback
-import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginEntity
-import com.gmail.pavlovsv93.rxjava2dagger2.repository.AccountRepositoryInterface
+import com.gmail.pavlovsv93.rxjava2dagger2.domain.AccountRepositoryInterface
+import com.gmail.pavlovsv93.rxjava2dagger2.domain.Callback
+import com.gmail.pavlovsv93.rxjava2dagger2.domain.room.LoginEntity
 
 class ForgetPasswordPresenter(
 	private var view: ForgetPasswordContract.ForgetPasswordViewInterface,

@@ -3,8 +3,6 @@ package com.gmail.pavlovsv93.rxjava2dagger2.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.gmail.pavlovsv93.rxjava2dagger2.R
-import com.gmail.pavlovsv93.rxjava2dagger2.app
-import com.gmail.pavlovsv93.rxjava2dagger2.repository.AccountRepositoryInterface
 import com.gmail.pavlovsv93.rxjava2dagger2.ui.login.LoginFragment
 
 class LoginActivity : AppCompatActivity() {

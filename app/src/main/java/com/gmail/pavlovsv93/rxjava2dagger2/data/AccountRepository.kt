@@ -1,37 +1,15 @@
-package com.gmail.pavlovsv93.rxjava2dagger2.repository
+package com.gmail.pavlovsv93.rxjava2dagger2.data
 
 import android.os.Handler
 import android.os.Looper
-import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginEntity
-import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginDAO
+import com.gmail.pavlovsv93.rxjava2dagger2.domain.room.LoginEntity
+import com.gmail.pavlovsv93.rxjava2dagger2.domain.LoginDAO
+import com.gmail.pavlovsv93.rxjava2dagger2.domain.AccountRepositoryInterface
+import com.gmail.pavlovsv93.rxjava2dagger2.domain.Callback
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.ExceptionMessage
 import java.lang.Exception
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
-
-interface AccountRepositoryInterface {
-	fun getAllLocalAccount(): List<LoginEntity>
-	fun getAuthorization(login: String, password: String, callback: Callback<LoginEntity>)
-	fun getAllAccount(callback: Callback<List<LoginEntity>>)
-	fun deleteAccount(login: String, callback: Callback<LoginEntity>)
-	fun updateAccount(
-		login: String,
-		password: String? = null,
-		email: String? = null,
-		callback: Callback<LoginEntity>
-	)
-
-	fun insertAccount(
-		login: String,
-		password: String,
-		email: String,
-		callback: Callback<LoginEntity>
-	)
-
-	fun getCheckedLogin(login: String, email: String): Boolean
-	fun getAccount(login: String, callback: Callback<LoginEntity>)
-	fun findAccount(data: String, callback: Callback<LoginEntity>)
-}
 
 class AccountRepository(private val localDataSource: LoginDAO) : AccountRepositoryInterface {
 

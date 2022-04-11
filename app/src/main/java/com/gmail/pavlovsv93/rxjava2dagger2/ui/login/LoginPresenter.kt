@@ -1,8 +1,8 @@
 package com.gmail.pavlovsv93.rxjava2dagger2.ui.login
 
-import com.gmail.pavlovsv93.rxjava2dagger2.R
-import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginEntity
-import com.gmail.pavlovsv93.rxjava2dagger2.repository.*
+import com.gmail.pavlovsv93.rxjava2dagger2.domain.AccountRepositoryInterface
+import com.gmail.pavlovsv93.rxjava2dagger2.domain.room.LoginEntity
+import com.gmail.pavlovsv93.rxjava2dagger2.domain.Callback
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.ExceptionMessage
 
 class LoginPresenter(

@@ -1,7 +1,8 @@
-package com.gmail.pavlovsv93.rxjava2dagger2.data.room
+package com.gmail.pavlovsv93.rxjava2dagger2.domain.room
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import com.gmail.pavlovsv93.rxjava2dagger2.domain.LoginDAO
 
 @Database(entities = [LoginEntity::class], version = 1)
 abstract class LoginDB : RoomDatabase() {
