@@ -61,7 +61,9 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 					} ?: callback.onSuccess(null)
 				}
 			} catch (exc: Exception) {
-				callback.onError(exc.toString())
+				handler.post {
+					callback.onError(exc.toString())
+				}
 			}
 		}
 	}
@@ -75,7 +77,9 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 					callback.onSuccess(result)
 				}
 			} catch (exc: Exception) {
-				callback.onError(exc.toString())
+				handler.post {
+					callback.onError(exc.toString())
+				}
 			}
 		}
 	}
@@ -99,7 +103,9 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 				}
 
 			} catch (exc: Exception) {
-				callback.onError(exc.toString())
+				handler.post {
+					callback.onError(exc.toString())
+				}
 			}
 		}
 	}
@@ -137,7 +143,9 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 					} ?: throw IllegalArgumentException(ExceptionMessage.E407.message)
 				}
 			} catch (exc: Exception) {
-				callback.onError(exc.toString())
+				handler.post {
+					callback.onError(exc.toString())
+				}
 			}
 		}
 	}
@@ -167,7 +175,9 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 					callback.onSuccess(newAccount)
 				}
 			} catch (exc: Exception) {
-				callback.onError(exc.toString())
+				handler.post {
+					callback.onError(exc.toString())
+				}
 			}
 		}
 	}
@@ -201,7 +211,9 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 						?: throw IllegalArgumentException(ExceptionMessage.E408.message)
 				}
 			} catch (exc: Exception) {
-				callback.onError(exc.toString())
+				handler.post {
+					callback.onError(exc.toString())
+				}
 			}
 		}
 	}
@@ -224,7 +236,9 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 					index.let { callback.onSuccess(localList[index]) }
 				}
 			} catch (exc: Exception) {
-				callback.onError(exc.toString())
+				handler.post {
+					callback.onError(exc.toString())
+				}
 			}
 		}
 	}
