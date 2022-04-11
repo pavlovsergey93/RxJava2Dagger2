@@ -2,6 +2,7 @@ package com.gmail.pavlovsv93.rxjava2dagger2.ui.registration
 
 import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginEntity
 import com.gmail.pavlovsv93.rxjava2dagger2.repository.*
+import com.gmail.pavlovsv93.rxjava2dagger2.utils.ExceptionMessage
 
 class RegistrationPresenter(
 	private var view: RegistrationContract.RegistrationViewInterface,
@@ -13,7 +14,7 @@ class RegistrationPresenter(
 		repo.insertAccount(login, password, email, object : Callback<LoginEntity> {
 			override fun onSuccess(result: LoginEntity?) {
 				view.hideProgress()
-				view.showSaved()
+				view.showSaved(ExceptionMessage.E201.message)
 			}
 
 			override fun onError(error: String) {
@@ -29,7 +30,7 @@ class RegistrationPresenter(
 			override fun onSuccess(result: LoginEntity?) {
 				view.hideProgress()
 				result?.let {
-					view.showSaved()
+					view.showSaved(ExceptionMessage.E201.message)
 				}
 			}
 

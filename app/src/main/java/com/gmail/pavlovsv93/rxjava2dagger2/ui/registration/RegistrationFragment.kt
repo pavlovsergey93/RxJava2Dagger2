@@ -1,6 +1,7 @@
 package com.gmail.pavlovsv93.rxjava2dagger2.ui.registration
 
 import android.os.Bundle
+import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import com.gmail.pavlovsv93.rxjava2dagger2.app
 import com.gmail.pavlovsv93.rxjava2dagger2.databinding.FragmentRegistrationBinding
 import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginEntity
 import com.gmail.pavlovsv93.rxjava2dagger2.ui.login.LoginFragment
+import com.gmail.pavlovsv93.rxjava2dagger2.utils.ExceptionMessage
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.showSnackBarNoAction
 
 class RegistrationFragment : Fragment(), RegistrationContract.RegistrationViewInterface {
@@ -77,14 +79,14 @@ class RegistrationFragment : Fragment(), RegistrationContract.RegistrationViewIn
 						if (binding.loginEditText.text.toString() != "" && binding.emailEditText.text.toString() != "") {
 							presenter.onInsertAccount(login, password, email)
 						} else {
-							showError("Не заполнены все поля!")
+							showError(ExceptionMessage.E410.message)
 						}
 					} else {
-						showError("Логин или email уже используются!")
+						showError(ExceptionMessage.E400.message)
 					}
 				}
 			} else {
-				showError("Пароли не совпадают")
+				showError(ExceptionMessage.E409.message)
 			}
 		}
 	}
@@ -101,8 +103,8 @@ class RegistrationFragment : Fragment(), RegistrationContract.RegistrationViewIn
 		binding.loginEditText.showSnackBarNoAction(error)
 	}
 
-	override fun showSaved() {
-		binding.loginEditText.showSnackBarNoAction(requireActivity().getString(R.string.saved_registration))
+	override fun showSaved(message: String) {
+		binding.loginEditText.showSnackBarNoAction(message)
 		requireActivity().supportFragmentManager.beginTransaction()
 			.replace(R.id.fragment_container_view, LoginFragment.newInstance())
 			.commit()

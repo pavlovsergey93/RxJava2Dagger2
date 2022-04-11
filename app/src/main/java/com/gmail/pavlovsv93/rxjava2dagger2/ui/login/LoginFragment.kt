@@ -12,6 +12,8 @@ import com.gmail.pavlovsv93.rxjava2dagger2.databinding.FragmentLoginBinding
 import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginEntity
 import com.gmail.pavlovsv93.rxjava2dagger2.ui.registration.RegistrationFragment
 import com.gmail.pavlovsv93.rxjava2dagger2.ui.forget.password.ForgetPasswordFragment
+import com.gmail.pavlovsv93.rxjava2dagger2.utils.ExceptionMessage
+import com.gmail.pavlovsv93.rxjava2dagger2.utils.ExceptionMessage.*
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.showSnackBarNoAction
 
 class LoginFragment : Fragment(), LoginContract.LoginViewInterface {
@@ -150,6 +152,11 @@ class LoginFragment : Fragment(), LoginContract.LoginViewInterface {
 	override fun setMessageState(massage: String) {
 		hideProgress()
 		binding.linearLayoutSingIn.showSnackBarNoAction(massage)
+	}
+
+	override fun showMessage(code: ExceptionMessage) {
+		hideProgress()
+		binding.linearLayoutSingIn.showSnackBarNoAction(code.message)
 	}
 
 }

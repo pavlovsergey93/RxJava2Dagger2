@@ -4,6 +4,7 @@ import android.os.Handler
 import android.os.Looper
 import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginEntity
 import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginDAO
+import com.gmail.pavlovsv93.rxjava2dagger2.utils.ExceptionMessage
 import java.lang.Exception
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
@@ -94,7 +95,7 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 					index?.let {
 						localDataSource.deleteAccount(localList[it])
 						callback.onSuccess(null)
-					} ?: throw IllegalArgumentException("Ошибка удаления")
+					} ?: throw IllegalArgumentException(ExceptionMessage.E405.message)
 				}
 
 			} catch (exc: Exception) {
@@ -126,14 +127,14 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 					if (email != "") {
 						localList[index].email = email
 					} else {
-						throw IllegalArgumentException("Email не задан или используется")
+						throw IllegalArgumentException(ExceptionMessage.E406.message)
 					}
 				}
 				handler.post {
 					index?.let {
 						localDataSource.updateAccount(localList[index])
 						callback.onSuccess(localList[index])
-					} ?: throw IllegalArgumentException("Ошибка обновления")
+					} ?: throw IllegalArgumentException(ExceptionMessage.E407.message)
 				}
 			} catch (exc: Exception) {
 				callback.onError(exc.toString())
@@ -153,10 +154,10 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 				val localList: List<LoginEntity> = getAllLocalAccount()
 				for (i in localList.indices) {
 					if (localList[i].login == login) {
-						throw IllegalArgumentException("Такой логин уже существует")
+						throw IllegalArgumentException(ExceptionMessage.E402.message)
 					}
 					if (localList[i].email == email) {
-						throw IllegalArgumentException("На этот E-mail зарегистрирован аккаунт")
+						throw IllegalArgumentException(ExceptionMessage.E403.message)
 					}
 				}
 				val newAccount =
@@ -197,7 +198,7 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 				}
 				handler.post {
 					index?.let { callback.onSuccess(localList[index]) }
-						?: throw IllegalArgumentException("Данные не найдены")
+						?: throw IllegalArgumentException(ExceptionMessage.E408.message)
 				}
 			} catch (exc: Exception) {
 				callback.onError(exc.toString())
@@ -217,7 +218,7 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 					}
 				}
 				if (index == null) {
-					throw IllegalArgumentException("Данные не найдены")
+					throw IllegalArgumentException(ExceptionMessage.E408.message)
 				}
 				handler.post {
 					index.let { callback.onSuccess(localList[index]) }

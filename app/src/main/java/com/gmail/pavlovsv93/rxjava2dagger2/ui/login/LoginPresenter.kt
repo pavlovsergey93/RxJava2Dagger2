@@ -3,6 +3,7 @@ package com.gmail.pavlovsv93.rxjava2dagger2.ui.login
 import com.gmail.pavlovsv93.rxjava2dagger2.R
 import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginEntity
 import com.gmail.pavlovsv93.rxjava2dagger2.repository.*
+import com.gmail.pavlovsv93.rxjava2dagger2.utils.ExceptionMessage
 
 class LoginPresenter(
 	private val view: LoginContract.LoginViewInterface,
@@ -18,7 +19,7 @@ class LoginPresenter(
 					view.showLayoutAccount(result)
 				} else {
 					view.showLayoutSing()
-					view.setError("Неверный логин или пароль!")
+					view.setError(ExceptionMessage.E401.message)
 				}
 			}
 
@@ -34,7 +35,7 @@ class LoginPresenter(
 		repo.deleteAccount(login, object : Callback<LoginEntity> {
 			override fun onSuccess(result: LoginEntity?) {
 				view.showLayoutSing()
-				view.setMessageState(R.string.delete_account_state.toString())
+				view.setMessageState(ExceptionMessage.E202.message)
 			}
 
 			override fun onError(error: String) {
