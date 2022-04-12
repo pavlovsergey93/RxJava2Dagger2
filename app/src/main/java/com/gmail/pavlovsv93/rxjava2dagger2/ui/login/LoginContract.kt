@@ -1,6 +1,7 @@
-package com.gmail.pavlovsv93.rxjava2dagger2
+package com.gmail.pavlovsv93.rxjava2dagger2.ui.login
 
-import com.gmail.pavlovsv93.rxjava2dagger2.model.LoginEntity
+import com.gmail.pavlovsv93.rxjava2dagger2.domain.room.LoginEntity
+import com.gmail.pavlovsv93.rxjava2dagger2.utils.ExceptionMessage
 
 class LoginContract {
 	interface LoginViewInterface {
@@ -12,10 +13,10 @@ class LoginContract {
 		fun showLayoutSing()
 		fun showLayoutAccount(account: LoginEntity)
 		fun setMessageState(massage: String)
+		fun showMessage(code: ExceptionMessage)
 	}
 
 	interface LoginPresenterInterface {
-		fun onAttachView(attachView: LoginViewInterface)
 		fun onAuthorization(login: String, password: String)
 		fun onDeleteAccount(login: String)
 	}

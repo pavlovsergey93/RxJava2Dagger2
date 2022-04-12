@@ -1,34 +1,15 @@
-package com.gmail.pavlovsv93.rxjava2dagger2.model
+package com.gmail.pavlovsv93.rxjava2dagger2.data
 
 import android.os.Handler
 import android.os.Looper
+import com.gmail.pavlovsv93.rxjava2dagger2.domain.room.LoginEntity
+import com.gmail.pavlovsv93.rxjava2dagger2.domain.LoginDAO
+import com.gmail.pavlovsv93.rxjava2dagger2.domain.AccountRepositoryInterface
+import com.gmail.pavlovsv93.rxjava2dagger2.domain.Callback
+import com.gmail.pavlovsv93.rxjava2dagger2.utils.ExceptionMessage
 import java.lang.Exception
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
-
-interface AccountRepositoryInterface {
-	fun getAllLocalAccount(): List<LoginEntity>
-	fun getAuthorization(login: String, password: String, callback: Callback<LoginEntity>)
-	fun getAllAccount(callback: Callback<List<LoginEntity>>)
-	fun deleteAccount(login: String, callback: Callback<LoginEntity>)
-	fun updateAccount(
-		login: String,
-		password: String? = null,
-		email: String? = null,
-		callback: Callback<LoginEntity>
-	)
-
-	fun insertAccount(
-		login: String,
-		password: String,
-		email: String,
-		callback: Callback<LoginEntity>
-	)
-
-	fun getCheckedLogin(login: String, email: String): Boolean
-	fun getAccount(login: String, callback: Callback<LoginEntity>)
-	fun findAccount(data: String, callback: Callback<LoginEntity>)
-}
 
 class AccountRepository(private val localDataSource: LoginDAO) : AccountRepositoryInterface {
 
@@ -58,7 +39,9 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 					} ?: callback.onSuccess(null)
 				}
 			} catch (exc: Exception) {
-				callback.onError(exc.toString())
+				handler.post {
+					callback.onError(exc.toString())
+				}
 			}
 		}
 	}
@@ -72,7 +55,9 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 					callback.onSuccess(result)
 				}
 			} catch (exc: Exception) {
-				callback.onError(exc.toString())
+				handler.post {
+					callback.onError(exc.toString())
+				}
 			}
 		}
 	}
@@ -92,11 +77,13 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 					index?.let {
 						localDataSource.deleteAccount(localList[it])
 						callback.onSuccess(null)
-					} ?: throw IllegalArgumentException("Ошибка удаления")
+					} ?: throw IllegalArgumentException(ExceptionMessage.E405.message)
 				}
 
 			} catch (exc: Exception) {
-				callback.onError(exc.toString())
+				handler.post {
+					callback.onError(exc.toString())
+				}
 			}
 		}
 	}
@@ -124,17 +111,19 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 					if (email != "") {
 						localList[index].email = email
 					} else {
-						throw IllegalArgumentException("Email не задан или используется")
+						throw IllegalArgumentException(ExceptionMessage.E406.message)
 					}
 				}
 				handler.post {
 					index?.let {
 						localDataSource.updateAccount(localList[index])
 						callback.onSuccess(localList[index])
-					} ?: throw IllegalArgumentException("Ошибка обновления")
+					} ?: throw IllegalArgumentException(ExceptionMessage.E407.message)
 				}
 			} catch (exc: Exception) {
-				callback.onError(exc.toString())
+				handler.post {
+					callback.onError(exc.toString())
+				}
 			}
 		}
 	}
@@ -151,10 +140,10 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 				val localList: List<LoginEntity> = getAllLocalAccount()
 				for (i in localList.indices) {
 					if (localList[i].login == login) {
-						throw IllegalArgumentException("Такой логин уже существует")
+						throw IllegalArgumentException(ExceptionMessage.E402.message)
 					}
 					if (localList[i].email == email) {
-						throw IllegalArgumentException("На этот E-mail зарегистрирован аккаунт")
+						throw IllegalArgumentException(ExceptionMessage.E403.message)
 					}
 				}
 				val newAccount =
@@ -164,7 +153,9 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 					callback.onSuccess(newAccount)
 				}
 			} catch (exc: Exception) {
-				callback.onError(exc.toString())
+				handler.post {
+					callback.onError(exc.toString())
+				}
 			}
 		}
 	}
@@ -195,10 +186,12 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 				}
 				handler.post {
 					index?.let { callback.onSuccess(localList[index]) }
-						?: throw IllegalArgumentException("Данные не найдены")
+						?: throw IllegalArgumentException(ExceptionMessage.E408.message)
 				}
 			} catch (exc: Exception) {
-				callback.onError(exc.toString())
+				handler.post {
+					callback.onError(exc.toString())
+				}
 			}
 		}
 	}
@@ -214,14 +207,16 @@ class AccountRepository(private val localDataSource: LoginDAO) : AccountReposito
 						break
 					}
 				}
-				if (index == null){
-					throw IllegalArgumentException("Данные не найдены")
+				if (index == null) {
+					throw IllegalArgumentException(ExceptionMessage.E408.message)
 				}
 				handler.post {
 					index.let { callback.onSuccess(localList[index]) }
 				}
 			} catch (exc: Exception) {
-				callback.onError(exc.toString())
+				handler.post {
+					callback.onError(exc.toString())
+				}
 			}
 		}
 	}

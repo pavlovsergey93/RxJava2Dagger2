@@ -1,13 +1,13 @@
-package com.gmail.pavlovsv93.rxjava2dagger2
+package com.gmail.pavlovsv93.rxjava2dagger2.ui.registration
 
-import com.gmail.pavlovsv93.rxjava2dagger2.model.LoginEntity
+import com.gmail.pavlovsv93.rxjava2dagger2.domain.room.LoginEntity
 
 class RegistrationContract {
 	interface RegistrationViewInterface{
 		fun showProgress()
 		fun hideProgress()
 		fun showError(error: String)
-		fun showSaved()
+		fun showSaved(message: String)
 		fun checkedAccount(result : Boolean?)
 		fun setView(account: LoginEntity)
 	}
