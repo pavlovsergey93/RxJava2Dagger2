@@ -4,12 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.gmail.pavlovsv93.rxjava2dagger2.app
 import com.gmail.pavlovsv93.rxjava2dagger2.databinding.FragmentForgotPasswordBinding
-import com.gmail.pavlovsv93.rxjava2dagger2.domain.ForgotPasswordViewModelInterface
-import com.gmail.pavlovsv93.rxjava2dagger2.domain.room.LoginEntity
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.hideKeyboard
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.showSnackBarNoAction
 

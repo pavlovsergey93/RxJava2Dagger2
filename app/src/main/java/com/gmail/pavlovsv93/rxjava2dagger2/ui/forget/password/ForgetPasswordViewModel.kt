@@ -2,7 +2,6 @@ package com.gmail.pavlovsv93.rxjava2dagger2.ui.forget.password
 
 import com.gmail.pavlovsv93.rxjava2dagger2.domain.AccountRepositoryInterface
 import com.gmail.pavlovsv93.rxjava2dagger2.domain.Callback
-import com.gmail.pavlovsv93.rxjava2dagger2.domain.ForgotPasswordViewModelInterface
 import com.gmail.pavlovsv93.rxjava2dagger2.domain.room.LoginEntity
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.Subscriptions
 
