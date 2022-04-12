@@ -35,6 +35,9 @@ class ForgetPasswordFragment : Fragment() {
 	override fun onDestroy() {
 		super.onDestroy()
 		_binding == null
+		viewModel.progressState.unsubscribeAll()
+		viewModel.successState.unsubscribeAll()
+		viewModel.errorMessage.unsubscribeAll()
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
