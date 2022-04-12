@@ -8,17 +8,18 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.gmail.pavlovsv93.rxjava2dagger2.app
 import com.gmail.pavlovsv93.rxjava2dagger2.databinding.FragmentForgotPasswordBinding
+import com.gmail.pavlovsv93.rxjava2dagger2.domain.ForgotPasswordViewModelInterface
 import com.gmail.pavlovsv93.rxjava2dagger2.domain.room.LoginEntity
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.hideKeyboard
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.showSnackBarNoAction
 
-class ForgetPasswordFragment : Fragment(), ForgetPasswordContract.ForgetPasswordViewInterface {
+class ForgetPasswordFragment : Fragment() {
 
 	private var _binding: FragmentForgotPasswordBinding? = null
 	private val binding get() = _binding!!
 
-	private val presenter: ForgetPasswordContract.ForgetPasswordPresenterInterface by lazy {
-		ForgetPasswordPresenter(view = this,repo = requireActivity().app.repo)
+	private val viewModel: ForgotPasswordViewModelInterface by lazy {
+		ForgetPasswordViewModel(requireActivity().app.repo)
 	}
 
 	companion object {
@@ -44,24 +45,31 @@ class ForgetPasswordFragment : Fragment(), ForgetPasswordContract.ForgetPassword
 		binding.forgotPasswordFindButton.setOnClickListener {
 			requireActivity().hideKeyboard(requireActivity())
 			var findAccount = binding.forgotPasswordEditText.text.toString()
-			presenter.findAccount(findAccount)
+			viewModel.findAccount(findAccount)
 		}
-	}
-
-	override fun showProgress() {
-		binding.fragmentForgotPasswordProgressBar.isVisible = true
-	}
-
-	override fun hideProgress() {
-		binding.fragmentForgotPasswordProgressBar.isVisible = false
-	}
-
-	override fun setDataAccount(account: LoginEntity) {
-		binding.forgotPasswordResultFindTextView.text =
-			"Логин: ${account.login}\nПароль: ${account.password}\nE-mail: ${account.email}"
-	}
-
-	override fun setError(error: String) {
-		binding.forgotPasswordFindButton.showSnackBarNoAction(error)
+		viewModel.progressState.subscribe { stateShow ->
+			with(binding.fragmentForgotPasswordProgressBar) {
+				visibility = if (stateShow == true) {
+					View.VISIBLE
+				} else {
+					View.GONE
+				}
+			}
+		}
+		viewModel.successState.subscribe { successState ->
+			with(binding.forgotPasswordResultFindTextView) {
+				if (successState != null) {
+					text = "Логин: ${successState.login}\n" +
+							"Пароль: ${successState.password}" +
+							"\nE-mail: ${successState.email}"
+				}
+			}
+		}
+		viewModel.errorMessage.subscribe { errorState ->
+			if (viewModel.successState.value == null && errorState != null) {
+				binding.forgotPasswordEditText.showSnackBarNoAction(errorState)
+				binding.forgotPasswordResultFindTextView.text = null
+			}
+		}
 	}
 }
