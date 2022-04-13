@@ -1,6 +1,18 @@
 package com.gmail.pavlovsv93.rxjava2dagger2.utils
 
-private typealias Subscriber<T> = (T?) -> Unit
+import android.os.Handler
+
+
+data class Subscriber<T>(
+	private val handler: Handler,
+	private val callback: (T) -> Unit
+) {
+	fun invoke(value: T) {
+		handler.post {
+			callback.invoke(value)
+		}
+	}
+}
 
 class Subscriptions<T> {
 	private var subscribers: MutableSet<Subscriber<T>?> = mutableSetOf()
@@ -8,16 +20,15 @@ class Subscriptions<T> {
 		private set
 	private var progressFlag: Boolean = false
 
-	fun subscribe(subscriber: Subscriber<T>) {
+	fun subscribe(
+		handler: Handler,
+		callback: (T) -> Unit
+	) {
+		val subscriber = Subscriber(handler, callback)
 		if (progressFlag) {
-			subscriber.invoke(value)
+			value?.let { subscriber.invoke(it) }
 		}
 		this.subscribers.add(subscriber)
-	}
-
-	fun unsubscribe(subscriber: Subscriber<T>) {
-		subscribers.remove(subscriber)
-		progressFlag = false
 	}
 
 	fun unsubscribeAll() {
@@ -29,7 +40,9 @@ class Subscriptions<T> {
 		progressFlag = true
 		this.value = value
 		subscribers.forEach { subscriber ->
-			subscriber?.invoke(value)
+			if (value != null) {
+				subscriber?.invoke(value)
+			}
 		}
 	}
 }

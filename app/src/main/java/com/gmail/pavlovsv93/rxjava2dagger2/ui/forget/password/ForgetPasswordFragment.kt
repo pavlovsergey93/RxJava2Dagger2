@@ -1,6 +1,8 @@
 package com.gmail.pavlovsv93.rxjava2dagger2.ui.forget.password
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +16,7 @@ class ForgetPasswordFragment : Fragment() {
 
 	private var _binding: FragmentForgotPasswordBinding? = null
 	private val binding get() = _binding!!
+	private val handler: Handler by lazy { Handler(Looper.getMainLooper()) }
 
 	private val viewModel: ForgotPasswordViewModelInterface by lazy {
 		ForgetPasswordViewModel(requireActivity().app.repo)
@@ -35,9 +38,11 @@ class ForgetPasswordFragment : Fragment() {
 	override fun onDestroy() {
 		super.onDestroy()
 		_binding == null
-		viewModel.progressState.unsubscribeAll()
-		viewModel.successState.unsubscribeAll()
-		viewModel.errorMessage.unsubscribeAll()
+		with(viewModel) {
+			progressState.unsubscribeAll()
+			successState.unsubscribeAll()
+			errorMessage.unsubscribeAll()
+		}
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,7 +52,7 @@ class ForgetPasswordFragment : Fragment() {
 			var findAccount = binding.forgotPasswordEditText.text.toString()
 			viewModel.findAccount(findAccount)
 		}
-		viewModel.progressState.subscribe { stateShow ->
+		viewModel.progressState.subscribe(handler) { stateShow ->
 			with(binding.fragmentForgotPasswordProgressBar) {
 				visibility = if (stateShow == true) {
 					View.VISIBLE
@@ -56,7 +61,7 @@ class ForgetPasswordFragment : Fragment() {
 				}
 			}
 		}
-		viewModel.successState.subscribe { successState ->
+		viewModel.successState.subscribe(handler) { successState ->
 			with(binding.forgotPasswordResultFindTextView) {
 				if (successState != null) {
 					text = "Логин: ${successState.login}\n" +
@@ -65,7 +70,7 @@ class ForgetPasswordFragment : Fragment() {
 				}
 			}
 		}
-		viewModel.errorMessage.subscribe { errorState ->
+		viewModel.errorMessage.subscribe(handler) { errorState ->
 			if (viewModel.successState.value == null && errorState != null) {
 				binding.forgotPasswordEditText.showSnackBarNoAction(errorState)
 				binding.forgotPasswordResultFindTextView.text = null

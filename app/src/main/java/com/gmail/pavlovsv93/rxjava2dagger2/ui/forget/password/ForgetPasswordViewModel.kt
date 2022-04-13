@@ -28,10 +28,6 @@ class ForgetPasswordViewModel(
 				successState.post(null)
 				errorMessage.post(error)
 			}
-
 		})
-
-
-
 	}
 }
