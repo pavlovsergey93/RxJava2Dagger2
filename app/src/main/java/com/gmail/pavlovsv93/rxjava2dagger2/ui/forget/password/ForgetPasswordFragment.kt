@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.gmail.pavlovsv93.rxjava2dagger2.app
 import com.gmail.pavlovsv93.rxjava2dagger2.databinding.FragmentForgotPasswordBinding
+import com.gmail.pavlovsv93.rxjava2dagger2.ui.ViewModel
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.hideKeyboard
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.showSnackBarNoAction
 
@@ -17,9 +18,8 @@ class ForgetPasswordFragment : Fragment() {
 	private var _binding: FragmentForgotPasswordBinding? = null
 	private val binding get() = _binding!!
 	private val handler: Handler by lazy { Handler(Looper.getMainLooper()) }
-
 	private val viewModel: ForgotPasswordViewModelInterface by lazy {
-		ForgetPasswordViewModel(requireActivity().app.repo)
+		ViewModel(requireActivity().app.repo)
 	}
 
 	companion object {
@@ -52,9 +52,9 @@ class ForgetPasswordFragment : Fragment() {
 			var findAccount = binding.forgotPasswordEditText.text.toString()
 			viewModel.findAccount(findAccount)
 		}
-		viewModel.progressState.subscribe(handler) { stateShow ->
+		viewModel.progressState.subscribe(handler) { progressStateShow ->
 			with(binding.fragmentForgotPasswordProgressBar) {
-				visibility = if (stateShow == true) {
+				visibility = if (progressStateShow) {
 					View.VISIBLE
 				} else {
 					View.GONE
@@ -70,9 +70,9 @@ class ForgetPasswordFragment : Fragment() {
 				}
 			}
 		}
-		viewModel.errorMessage.subscribe(handler) { errorState ->
-			if (viewModel.successState.value == null && errorState != null) {
-				binding.forgotPasswordEditText.showSnackBarNoAction(errorState)
+		viewModel.errorMessage.subscribe(handler) { errorMessageState ->
+			if (viewModel.successState.value == null && errorMessageState != null) {
+				binding.forgotPasswordEditText.showSnackBarNoAction(errorMessageState)
 				binding.forgotPasswordResultFindTextView.text = null
 			}
 		}
