@@ -5,15 +5,17 @@ import com.gmail.pavlovsv93.rxjava2dagger2.domain.Callback
 import com.gmail.pavlovsv93.rxjava2dagger2.domain.room.LoginEntity
 import com.gmail.pavlovsv93.rxjava2dagger2.ui.forget.password.ForgotPasswordViewModelInterface
 import com.gmail.pavlovsv93.rxjava2dagger2.ui.login.LoginViewModelInterface
+import com.gmail.pavlovsv93.rxjava2dagger2.ui.registration.RegistrationViewModelInterface
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.ExceptionMessage
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.Subscriptions
 
 class ViewModel(
-	private val repo: AccountRepositoryInterface,
-) : ForgotPasswordViewModelInterface, LoginViewModelInterface {
+	private val repo: AccountRepositoryInterface
+) : ForgotPasswordViewModelInterface, LoginViewModelInterface, RegistrationViewModelInterface {
 	override val showLayoutState: Subscriptions<Boolean> = Subscriptions()
 	override val progressState: Subscriptions<Boolean> = Subscriptions()
 	override val successState: Subscriptions<LoginEntity> = Subscriptions()
+	override val accountCheckState: Subscriptions<Boolean> = Subscriptions()
 	override val errorMessage: Subscriptions<String?> = Subscriptions()
 
 	//todo ForgotPasswordViewModelInterface
@@ -74,4 +76,70 @@ class ViewModel(
 			}
 		})
 	}
+
+	//todo RegistrationViewModelInterface
+	override fun onCheckedAccount(login: String, email: String) {
+		progressState.post(true)
+		repo.getCheckedLogin(login, email, object : Callback<Boolean>{
+			override fun onSuccess(result: Boolean?) {
+				progressState.post(false)
+				accountCheckState.post(result)
+			}
+
+			override fun onError(error: String) {
+				progressState.post(false)
+				errorMessage.post(error)
+			}
+
+		})
+	}
+
+	override fun onInsertAccount(login: String, password: String, email: String) {
+		progressState.post(true)
+		repo.insertAccount(login, password, email, object : Callback<LoginEntity> {
+			override fun onSuccess(result: LoginEntity?) {
+				progressState.post(false)
+				errorMessage.post(ExceptionMessage.E201.message)
+			}
+
+			override fun onError(error: String) {
+				errorMessage.post(error)
+				progressState.post(false)
+			}
+		})
+	}
+
+	override fun onUpdateAccount(login: String, password: String?, email: String?) {
+		progressState.post(true)
+		repo.updateAccount(login, password, email, object : Callback<LoginEntity> {
+			override fun onSuccess(result: LoginEntity?) {
+				progressState.post(false)
+				result?.let {
+					successState.post(result)
+					errorMessage.post(ExceptionMessage.E201.message)
+				}
+			}
+
+			override fun onError(error: String) {
+				progressState.post(false)
+				errorMessage.post(error)
+			}
+		})
+	}
+
+	override fun getDataAccount(login: String) {
+		progressState.post(true)
+		repo.getAccount(login, object : Callback<LoginEntity> {
+			override fun onSuccess(result: LoginEntity?) {
+				progressState.post(false)
+				result?.let { successState.post(result) }
+			}
+
+			override fun onError(error: String) {
+				progressState.post(false)
+				errorMessage.post(error)
+			}
+		})
+	}
+
 }

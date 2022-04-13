@@ -21,7 +21,7 @@ interface AccountRepositoryInterface {
 		callback: Callback<LoginEntity>
 	)
 
-	fun getCheckedLogin(login: String, email: String): Boolean
+	fun getCheckedLogin(login: String, email: String, callback: Callback<Boolean>)
 	fun getAccount(login: String, callback: Callback<LoginEntity>)
 	fun findAccount(data: String, callback: Callback<LoginEntity>)
 }
