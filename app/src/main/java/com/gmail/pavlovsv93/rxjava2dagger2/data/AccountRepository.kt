@@ -1,11 +1,9 @@
 package com.gmail.pavlovsv93.rxjava2dagger2.data
 
-import android.os.Handler
-import android.os.Looper
-import com.gmail.pavlovsv93.rxjava2dagger2.domain.room.LoginEntity
-import com.gmail.pavlovsv93.rxjava2dagger2.domain.LoginDAO
+import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginEntity
+import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginDAO
 import com.gmail.pavlovsv93.rxjava2dagger2.domain.AccountRepositoryInterface
-import com.gmail.pavlovsv93.rxjava2dagger2.domain.Callback
+import com.gmail.pavlovsv93.rxjava2dagger2.utils.Callback
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.ExceptionMessage
 import java.lang.Exception
 import java.util.concurrent.Executor

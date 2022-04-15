@@ -1,8 +1,8 @@
 package com.gmail.pavlovsv93.rxjava2dagger2.ui
 
 import com.gmail.pavlovsv93.rxjava2dagger2.domain.AccountRepositoryInterface
-import com.gmail.pavlovsv93.rxjava2dagger2.domain.Callback
-import com.gmail.pavlovsv93.rxjava2dagger2.domain.room.LoginEntity
+import com.gmail.pavlovsv93.rxjava2dagger2.utils.Callback
+import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginEntity
 import com.gmail.pavlovsv93.rxjava2dagger2.ui.forget.password.ForgotPasswordViewModelInterface
 import com.gmail.pavlovsv93.rxjava2dagger2.ui.login.LoginViewModelInterface
 import com.gmail.pavlovsv93.rxjava2dagger2.ui.registration.RegistrationViewModelInterface
@@ -80,7 +80,7 @@ class ViewModel(
 	//todo RegistrationViewModelInterface
 	override fun onCheckedAccount(login: String, email: String) {
 		progressState.post(true)
-		repo.getCheckedLogin(login, email, object : Callback<Boolean>{
+		repo.getCheckedLogin(login, email, object : Callback<Boolean> {
 			override fun onSuccess(result: Boolean?) {
 				progressState.post(false)
 				accountCheckState.post(result)

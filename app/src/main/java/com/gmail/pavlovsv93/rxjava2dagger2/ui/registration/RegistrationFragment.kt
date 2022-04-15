@@ -6,14 +6,11 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.gmail.pavlovsv93.rxjava2dagger2.R
 import com.gmail.pavlovsv93.rxjava2dagger2.app
 import com.gmail.pavlovsv93.rxjava2dagger2.databinding.FragmentRegistrationBinding
-import com.gmail.pavlovsv93.rxjava2dagger2.domain.room.LoginEntity
 import com.gmail.pavlovsv93.rxjava2dagger2.ui.ViewModel
-import com.gmail.pavlovsv93.rxjava2dagger2.ui.login.LoginFragment
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.ExceptionMessage
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.hideKeyboard
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.showSnackBarNoAction

@@ -1,6 +1,6 @@
 package com.gmail.pavlovsv93.rxjava2dagger2.ui.forget.password
 
-import com.gmail.pavlovsv93.rxjava2dagger2.domain.room.LoginEntity
+import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginEntity
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.Subscriptions
 
 interface ForgotPasswordViewModelInterface {
