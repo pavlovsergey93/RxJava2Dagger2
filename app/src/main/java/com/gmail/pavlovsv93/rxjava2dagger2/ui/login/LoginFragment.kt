@@ -1,6 +1,8 @@
 package com.gmail.pavlovsv93.rxjava2dagger2.ui.login
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,19 +11,19 @@ import androidx.fragment.app.Fragment
 import com.gmail.pavlovsv93.rxjava2dagger2.R
 import com.gmail.pavlovsv93.rxjava2dagger2.app
 import com.gmail.pavlovsv93.rxjava2dagger2.databinding.FragmentLoginBinding
-import com.gmail.pavlovsv93.rxjava2dagger2.domain.room.LoginEntity
+import com.gmail.pavlovsv93.rxjava2dagger2.ui.ViewModel
 import com.gmail.pavlovsv93.rxjava2dagger2.ui.registration.RegistrationFragment
 import com.gmail.pavlovsv93.rxjava2dagger2.ui.forget.password.ForgetPasswordFragment
-import com.gmail.pavlovsv93.rxjava2dagger2.utils.ExceptionMessage
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.hideKeyboard
 import com.gmail.pavlovsv93.rxjava2dagger2.utils.showSnackBarNoAction
 
-class LoginFragment : Fragment(), LoginContract.LoginViewInterface {
+class LoginFragment : Fragment() {
 
 	private var _binding: FragmentLoginBinding? = null
 	private val binding get() = _binding!!
-	private val presenter: LoginContract.LoginPresenterInterface by lazy {
-		LoginPresenter(view = this, repo = requireActivity().app.repo)
+	private val handler: Handler by lazy { Handler(Looper.getMainLooper()) }
+	private val viewModel: LoginViewModelInterface by lazy {
+		ViewModel(requireActivity().app.repo)
 	}
 
 	companion object {
@@ -45,6 +47,12 @@ class LoginFragment : Fragment(), LoginContract.LoginViewInterface {
 	override fun onDestroy() {
 		super.onDestroy()
 		_binding == null
+		with(viewModel) {
+			successState.unsubscribeAll()
+			errorMessage.unsubscribeAll()
+			showLayoutState.unsubscribeAll()
+			progressState.unsubscribeAll()
+		}
 	}
 
 	override fun onCreateView(
@@ -64,7 +72,7 @@ class LoginFragment : Fragment(), LoginContract.LoginViewInterface {
 			requireActivity().hideKeyboard(requireActivity())
 			val login = binding.loginEditText.text.toString()
 			val password = binding.passwordEditText.text.toString()
-			presenter.onAuthorization(login, password)
+			viewModel.onAuthorization(login, password)
 		}
 
 		// Обработка нажатия на "Регистрация"
@@ -79,8 +87,7 @@ class LoginFragment : Fragment(), LoginContract.LoginViewInterface {
 		//Обработка нажатия на "Удалить аккаунт"
 		binding.deleteAccountButton.setOnClickListener {
 			val login = binding.loginEditText.text.toString()
-			presenter.onDeleteAccount(login)
-			showLayoutSing()
+			viewModel.onDeleteAccount(login)
 		}
 
 		//Обработка нажатия на "Обновить аккаунт"
@@ -94,7 +101,7 @@ class LoginFragment : Fragment(), LoginContract.LoginViewInterface {
 
 		//Обработка нажатия "Выход"
 		binding.exitButton.setOnClickListener {
-			showLayoutSing()
+			viewModel.showLayoutState.post(false)
 		}
 
 		// Обработка нажатия "Забыл пароль"
@@ -105,61 +112,57 @@ class LoginFragment : Fragment(), LoginContract.LoginViewInterface {
 				.addToBackStack("ForgetPasswordFragment")
 				.commit()
 		}
-
-	}
-
-	override fun showProgress() {
-		binding.fragmentLoginProgressBar.isVisible = true
-	}
-
-	override fun hideProgress() {
-		binding.fragmentLoginProgressBar.visibility = View.GONE
-	}
-
-	override fun setCheckedSing() {
-		binding.singInButton.setOnClickListener {
-			showProgress()
-			it.isClickable = false
-			binding.registrationButton.isVisible = false
-			binding.forgotPasswordButton.isVisible = false
+		with(viewModel) {
+			progressState.subscribe(handler) { progressStateShow ->
+				with(binding.fragmentLoginProgressBar) {
+					visibility = if (progressStateShow) {
+						View.VISIBLE
+					} else {
+						View.GONE
+					}
+				}
+			}
+			errorMessage.subscribe(handler) { errorMessageState ->
+				if (successState.value == null && errorMessageState != null) {
+					binding.linearLayoutSingIn.showSnackBarNoAction(errorMessageState)
+				}
+			}
+			showLayoutState.subscribe(handler) { layoutState ->
+				if (layoutState) {
+					binding.linearLayoutSingIn.isVisible = false
+					binding.linearLayoutSingOut.isVisible = true
+				} else {
+					binding.linearLayoutSingIn.isVisible = true
+					binding.linearLayoutSingOut.isVisible = false
+				}
+			}
+			successState.subscribe(handler) { successState ->
+				if (showLayoutState.value == true && successState != null) {
+					binding.infoTextView.text =
+						("Логин: ${successState.login} \nE-mail: ${successState.email}")
+				} else {
+					binding.infoTextView.text = null
+				}
+			}
 		}
+
+
 	}
 
-	override fun setError(error: String) {
-		hideProgress()
-		binding.forgotPasswordButton.isVisible = true
-		binding.registrationButton.isVisible = true
-		binding.singInButton.isVisible = true
-		binding.loginEditText.showSnackBarNoAction(error)
-	}
 
-	override fun setRegistration() {
-		requireActivity().supportFragmentManager.beginTransaction()
-			.replace(R.id.fragment_container_view, RegistrationFragment.newInstance())
-			.addToBackStack(getString(R.string.registration))
-			.commit()
-	}
-
-	override fun showLayoutSing() {
-		binding.linearLayoutSingIn.visibility = View.VISIBLE
-		binding.linearLayoutSingOut.visibility = View.GONE
-		binding.infoTextView.text = ""
-	}
-
-	override fun showLayoutAccount(account: LoginEntity) {
-		binding.infoTextView.text = ("Логин: ${account.login} \nE-mail: ${account.email}")
-		binding.linearLayoutSingOut.visibility = View.VISIBLE
-		binding.linearLayoutSingIn.visibility = View.GONE
-	}
-
-	override fun setMessageState(massage: String) {
-		hideProgress()
-		binding.linearLayoutSingIn.showSnackBarNoAction(massage)
-	}
-
-	override fun showMessage(code: ExceptionMessage) {
-		hideProgress()
-		binding.linearLayoutSingIn.showSnackBarNoAction(code.message)
-	}
-
+//	override fun setCheckedSing() {
+//		binding.singInButton.setOnClickListener {
+//			showProgress()
+//			it.isClickable = false
+//			binding.registrationButton.isVisible = false
+//			binding.forgotPasswordButton.isVisible = false
+//		}
+//	}
+//
+//	override fun setRegistration() {
+//		requireActivity().supportFragmentManager.beginTransaction()
+//			.replace(R.id.fragment_container_view, RegistrationFragment.newInstance())
+//			.addToBackStack(getString(R.string.registration))
+//			.commit()
+//	}
 }

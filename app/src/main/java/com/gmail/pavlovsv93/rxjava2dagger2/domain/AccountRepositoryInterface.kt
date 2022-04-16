@@ -1,6 +1,7 @@
 package com.gmail.pavlovsv93.rxjava2dagger2.domain
 
-import com.gmail.pavlovsv93.rxjava2dagger2.domain.room.LoginEntity
+import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginEntity
+import com.gmail.pavlovsv93.rxjava2dagger2.utils.Callback
 
 interface AccountRepositoryInterface {
 	fun getAllLocalAccount(): List<LoginEntity>
@@ -21,7 +22,7 @@ interface AccountRepositoryInterface {
 		callback: Callback<LoginEntity>
 	)
 
-	fun getCheckedLogin(login: String, email: String): Boolean
+	fun getCheckedLogin(login: String, email: String, callback: Callback<Boolean>)
 	fun getAccount(login: String, callback: Callback<LoginEntity>)
 	fun findAccount(data: String, callback: Callback<LoginEntity>)
 }
