@@ -3,8 +3,8 @@ package com.gmail.pavlovsv93.rxjava2dagger2
 import android.app.Application
 import android.content.Context
 import androidx.room.Room
-import com.gmail.pavlovsv93.rxjava2dagger2.domain.LoginDAO
-import com.gmail.pavlovsv93.rxjava2dagger2.domain.room.LoginDB
+import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginDAO
+import com.gmail.pavlovsv93.rxjava2dagger2.data.room.LoginDB
 import com.gmail.pavlovsv93.rxjava2dagger2.data.AccountRepository
 import com.gmail.pavlovsv93.rxjava2dagger2.domain.AccountRepositoryInterface
 
