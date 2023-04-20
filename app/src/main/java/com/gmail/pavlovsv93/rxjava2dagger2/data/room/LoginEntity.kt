@@ -1,4 +1,4 @@
-package com.gmail.pavlovsv93.rxjava2dagger2.model
+package com.gmail.pavlovsv93.rxjava2dagger2.data.room
 
 import android.os.Parcel
 import android.os.Parcelable
@@ -22,8 +22,7 @@ data class LoginEntity(
 		parcel.readString(),
 		parcel.readString(),
 		parcel.readString()
-	) {
-	}
+	)
 
 	override fun writeToParcel(parcel: Parcel, flags: Int) {
 		parcel.writeValue(uid)
